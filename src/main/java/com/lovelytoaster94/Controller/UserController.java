@@ -1,6 +1,5 @@
 package com.lovelytoaster94.Controller;
 
-import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import com.lovelytoaster94.Dao.UserMapper;
 import com.lovelytoaster94.Pojo.User;

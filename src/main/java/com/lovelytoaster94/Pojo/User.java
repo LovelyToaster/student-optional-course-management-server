@@ -1,7 +1,5 @@
 package com.lovelytoaster94.Pojo;
 
-import com.alibaba.fastjson2.annotation.JSONField;
-
 public class User {
     private String userName;
     private String userPassword;
