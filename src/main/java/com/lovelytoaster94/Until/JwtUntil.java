@@ -52,6 +52,9 @@ public class JwtUntil {
                     }
                 }
             }
+        } else {
+            response.addHeader("Cache-Control", "no-cache");
+            response.setStatus(301);
         }
     }
 }
