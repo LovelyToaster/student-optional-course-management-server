@@ -28,7 +28,7 @@ public class UserController {
         JSONObject jsonData = new JSONObject();
         if (data != null) {
             jsonData.put("userName", data.getUserName());
-            jsonData.put("permission", data.getPermission());
+            jsonData.put("permissions", data.getPermission());
             jsonData.put("verify", true);
             response.addHeader("Set-Cookie", "token=" + jwtUntil.createToken(data) + ";Path=/;HttpOnly");
         } else {
