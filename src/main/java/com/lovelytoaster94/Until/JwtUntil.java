@@ -10,7 +10,6 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -50,27 +49,23 @@ public class JwtUntil {
         }
     }
 
-    public void loginStatus(HttpServletRequest request, HttpServletResponse response) {
+    public String loginStatus(HttpServletRequest request, HttpServletResponse response) {
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("token")) {
                     JSONObject data = verifyToken(cookie.getValue());
-                    if ((Boolean) data.get("verify")) {
-                        try {
-                            response.getWriter().write(data.toJSONString());
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                    } else {
+                    if (!(Boolean) data.get("verify")) {
                         response.addHeader("Cache-Control", "no-cache");
                         response.setStatus(301);
                     }
+                    return data.toJSONString();
                 }
             }
         } else {
             response.addHeader("Cache-Control", "no-cache");
             response.setStatus(301);
         }
+        return null;
     }
 }

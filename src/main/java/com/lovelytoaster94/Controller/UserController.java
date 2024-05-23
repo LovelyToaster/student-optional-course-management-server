@@ -38,8 +38,9 @@ public class UserController {
     }
 
     @RequestMapping(value = "/login/status", method = RequestMethod.GET)
-    public void loginStatus(HttpServletRequest request, HttpServletResponse response) {
+    @ResponseBody
+    public String loginStatus(HttpServletRequest request, HttpServletResponse response) {
         JwtUntil jwtUntil = new JwtUntil();
-        jwtUntil.loginStatus(request, response);
+        return jwtUntil.loginStatus(request, response);
     }
 }
