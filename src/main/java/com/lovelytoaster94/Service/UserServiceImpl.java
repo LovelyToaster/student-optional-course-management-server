@@ -13,7 +13,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User loginVerify(String userName, String userPassword) {
-        return userMapper.loginVerify(userName, userPassword);
+    public User loginVerify(User user) {
+        return userMapper.loginVerify(user);
     }
 }

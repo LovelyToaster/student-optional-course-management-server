@@ -37,7 +37,6 @@ public class JwtUntil {
         try {
             JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(secretToken)).build();
             decodedJWT = jwtVerifier.verify(token);
-            System.out.println(decodedJWT.getClaim("userName").asString());
             jsonObject.put("userName", decodedJWT.getClaim("userName").asString());
             jsonObject.put("permissions", decodedJWT.getClaim("permissions").asInt());
             jsonObject.put("verify", true);

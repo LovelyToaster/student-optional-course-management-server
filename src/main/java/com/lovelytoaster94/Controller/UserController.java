@@ -23,7 +23,7 @@ public class UserController {
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     @ResponseBody
     public String loginVerify(User user, HttpServletResponse response) {
-        User data = userMapper.loginVerify(user.getUserName(), user.getUserPassword());
+        User data = userMapper.loginVerify(user);
         JwtUntil jwtUntil = new JwtUntil();
         JSONObject jsonData = new JSONObject();
         if (data != null) {
