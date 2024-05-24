@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lovelytoaster94.Dao.TeacherMapper">
+    <select id="allTeacherInfo" resultType="com.lovelytoaster94.Pojo.Teacher">
+        select *
+        from teacher
+    </select>
+
+    <update id="modifyTeacherInfo" parameterType="com.lovelytoaster94.Pojo.Teacher">
+        update teacher
+        set teacherName=#{teacherName},
+            teacherSex=#{teacherSex},
+            teacherAge=#{teacherAge},
+            teacherDegree=#{teacherDegree},
+            teacherJob=#{teacherJob},
+            teacherGraduateInstitutions=#{teacherGraduateInstitutions},
+            teacherHealth=#{teacherHealth}
+        where teacherNo = #{teacherNo}
+    </update>
+
+    <delete id="deleteTeacherInfo" parameterType="int">
+        delete
+        from teacher
+        where teacherNo = #{teacherNo}
+    </delete>
+</mapper>

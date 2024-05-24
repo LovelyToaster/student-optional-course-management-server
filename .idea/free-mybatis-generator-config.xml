@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PersistentConfig">
+    <option name="historyConfigList">
+      <map>
+        <entry key="teacher">
+          <value>
+            <Config>
+              <option name="daoMvnPath" value="src/main/java" />
+              <option name="daoName" value="TeacherMapper" />
+              <option name="daoPackage" value="com.lovelytoaster94.Dao" />
+              <option name="daoPostfix" value="Mapper" />
+              <option name="modelMvnPath" value="src/main/java" />
+              <option name="modelName" value="Teacher" />
+              <option name="modelPackage" value="com.lovelytoaster94.Pojo" />
+              <option name="name" value="teacher" />
+              <option name="primaryKey" value="teacherNo" />
+              <option name="projectFolder" value="$PROJECT_DIR$" />
+              <option name="tableName" value="teacher" />
+              <option name="xmlMvnPath" value="src/main/resources" />
+              <option name="xmlPackage" value="" />
+            </Config>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
