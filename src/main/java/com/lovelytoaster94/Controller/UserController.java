@@ -1,8 +1,8 @@
 package com.lovelytoaster94.Controller;
 
 import com.alibaba.fastjson2.JSONObject;
-import com.lovelytoaster94.Dao.UserMapper;
 import com.lovelytoaster94.Pojo.User;
+import com.lovelytoaster94.Service.UserService;
 import com.lovelytoaster94.Until.JwtUntil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -14,16 +14,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping(value = "/user", method = RequestMethod.GET)
 public class UserController {
-    private final UserMapper userMapper;
+    private final UserService userService;
 
-    public UserController(UserMapper userMapper) {
-        this.userMapper = userMapper;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
+
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     @ResponseBody
     public String loginVerify(User user, HttpServletResponse response) {
-        User data = userMapper.loginVerify(user);
+        User data = userService.loginVerify(user);
         JwtUntil jwtUntil = new JwtUntil();
         JSONObject jsonData = new JSONObject();
         if (data != null) {
