@@ -4,7 +4,7 @@ import com.alibaba.fastjson2.annotation.JSONField;
 
 public class Teacher {
     @JSONField
-    private int teacherNo;
+    private String teacherNo;
     @JSONField
     private String teacherName;
     @JSONField
@@ -20,11 +20,11 @@ public class Teacher {
     @JSONField
     private String teacherHealth;
 
-    public int getTeacherNo() {
+    public String getTeacherNo() {
         return teacherNo;
     }
 
-    public void setTeacherNo(int teacherNo) {
+    public void setTeacherNo(String teacherNo) {
         this.teacherNo = teacherNo;
     }
 

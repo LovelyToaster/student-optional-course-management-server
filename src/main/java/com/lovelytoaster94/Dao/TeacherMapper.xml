@@ -31,7 +31,7 @@
         select *
         from teacher
         <where>
-            <if test="teacherNo!=0">
+            <if test="teacherNo!=null">
                 and teacherNo=#{teacherNo}
             </if>
             <if test="teacherName!=null">
