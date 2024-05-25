@@ -10,4 +10,6 @@ public interface TeacherService {
     boolean modifyTeacherInfo(Teacher teacher);
 
     boolean deleteTeacherInfo(int teacherNo);
+
+    List<Teacher> searchTeacherInfo(Teacher teacher);
 }

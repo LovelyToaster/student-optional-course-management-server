@@ -25,4 +25,8 @@ public class TeacherServiceImpl implements TeacherService {
     public boolean deleteTeacherInfo(int teacherNo) {
         return teacherMapper.deleteTeacherInfo(teacherNo);
     }
+
+    public List<Teacher> searchTeacherInfo(Teacher teacher) {
+        return teacherMapper.searchTeacherInfo(teacher);
+    }
 }

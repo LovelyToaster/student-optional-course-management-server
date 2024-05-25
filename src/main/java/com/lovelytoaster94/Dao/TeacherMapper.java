@@ -11,4 +11,6 @@ public interface TeacherMapper {
     boolean modifyTeacherInfo(Teacher teacher);
 
     boolean deleteTeacherInfo(@Param("teacherNo") int teacherNo);
+
+    List<Teacher> searchTeacherInfo(Teacher teacher);
 }

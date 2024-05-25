@@ -2,10 +2,8 @@ package com.lovelytoaster94.Controller;
 
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
-import com.lovelytoaster94.Dao.TeacherMapper;
 import com.lovelytoaster94.Pojo.Teacher;
 import com.lovelytoaster94.Service.TeacherService;
-import com.lovelytoaster94.Service.TeacherServiceImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -64,6 +62,20 @@ public class TeacherController {
             return jsonObject.toJSONString();
         }
         jsonObject.put("message", true);
+        return jsonObject.toJSONString();
+    }
+
+    @RequestMapping(value = "/search", method = RequestMethod.POST)
+    @ResponseBody
+    public String searchTeacherInfo(Teacher teacher) {
+        List<Teacher> data = teacherService.searchTeacherInfo(teacher);
+        JSONObject jsonObject = new JSONObject();
+        if (!data.isEmpty()) {
+            JSONArray jsonArray = JSONArray.parseArray(JSONArray.toJSONString(data));
+            jsonObject.put("data", jsonArray);
+        } else {
+            jsonObject.put("data", false);
+        }
         return jsonObject.toJSONString();
     }
 }

@@ -25,4 +25,36 @@
         from teacher
         where teacherNo = #{teacherNo}
     </delete>
+
+    <select id="searchTeacherInfo" parameterType="com.lovelytoaster94.Pojo.Teacher"
+            resultType="com.lovelytoaster94.Pojo.Teacher">
+        select *
+        from teacher
+        <where>
+            <if test="teacherNo!=0">
+                and teacherNo=#{teacherNo}
+            </if>
+            <if test="teacherName!=null">
+                and teacherName like "%"#{teacherName}"%"
+            </if>
+            <if test="teacherSex!=null">
+                and teacherSex=#{teacherSex}
+            </if>
+            <if test="teacherAge!=0">
+                and teacherAge=#{teacherAge}
+            </if>
+            <if test="teacherDegree!=null">
+                and teacherDegree=#{teacherDegree}
+            </if>
+            <if test="teacherJob!=null">
+                and teacherJob=#{teacherJob}
+            </if>
+            <if test="teacherGraduateInstitutions!=null">
+                and teacherGraduateInstitutions=#{teacherGraduateInstitutions}
+            </if>
+            <if test="teacherHealth!=null">
+                and teacherHealth=#{teacherHealth}
+            </if>
+        </where>
+    </select>
 </mapper>
