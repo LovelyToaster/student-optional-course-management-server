@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lovelytoaster94.Dao.StudentMapper">
+    <select id="allStudentInfo" resultType="com.lovelytoaster94.Pojo.Student">
+        select *
+        from student
+    </select>
+    <update id="modifyStudentInfo" parameterType="com.lovelytoaster94.Pojo.Student">
+        update student
+        set studentName=#{studentName},
+            studentSex=#{studentSex},
+            studentAge=#{studentAge},
+            studentFaculties=#{studentFaculties},
+            studentClass=#{studentClass}
+        where studentNo = #{studentNo}
+    </update>
+    <delete id="deleteStudentInfo" parameterType="string">
+        delete
+        from student
+        where studentNo = #{studentNo}
+    </delete>
+    <select id="searchStudentInfo" parameterType="com.lovelytoaster94.Pojo.Student"
+            resultType="com.lovelytoaster94.Pojo.Student">
+        select *
+        from student
+        <where>
+            <if test="studentNo!=null">
+                and studentNo=#{studentNo}
+            </if>
+            <if test="studentName!=null">
+                and studentName like "%"#{studentName}"%"
+            </if>
+            <if test="studentSex!=null">
+                and studentSex=#{studentSex}
+            </if>
+            <if test="studentAge!=0">
+                and studentAge=#{studentAge}
+            </if>
+            <if test="studentFaculties!=null">
+                and studentFaculties=#{studentFaculties}
+            </if>
+            <if test="studentClass!=null">
+                and studentClass=#{studentClass}
+            </if>
+        </where>
+    </select>
+</mapper>
