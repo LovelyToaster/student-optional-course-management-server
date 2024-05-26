@@ -9,7 +9,7 @@ public interface TeacherService {
 
     boolean modifyTeacherInfo(Teacher teacher);
 
-    boolean deleteTeacherInfo(int teacherNo);
+    boolean deleteTeacherInfo(String teacherNo);
 
     List<Teacher> searchTeacherInfo(Teacher teacher);
 }

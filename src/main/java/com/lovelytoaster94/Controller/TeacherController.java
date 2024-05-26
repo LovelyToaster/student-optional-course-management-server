@@ -54,7 +54,7 @@ public class TeacherController {
 
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @ResponseBody
-    public String deleteTeacherInfo(@RequestParam("teacherNo") int teacherNo) {
+    public String deleteTeacherInfo(@RequestParam("teacherNo") String teacherNo) {
         JSONObject jsonObject = new JSONObject();
         boolean data = teacherService.deleteTeacherInfo(teacherNo);
         if (!data) {

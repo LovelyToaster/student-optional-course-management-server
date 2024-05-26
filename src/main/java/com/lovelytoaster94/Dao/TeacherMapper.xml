@@ -20,7 +20,7 @@
         where teacherNo = #{teacherNo}
     </update>
 
-    <delete id="deleteTeacherInfo" parameterType="int">
+    <delete id="deleteTeacherInfo" parameterType="string">
         delete
         from teacher
         where teacherNo = #{teacherNo}

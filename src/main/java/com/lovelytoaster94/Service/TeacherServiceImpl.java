@@ -22,7 +22,7 @@ public class TeacherServiceImpl implements TeacherService {
         return teacherMapper.modifyTeacherInfo(teacher);
     }
 
-    public boolean deleteTeacherInfo(int teacherNo) {
+    public boolean deleteTeacherInfo(String teacherNo) {
         return teacherMapper.deleteTeacherInfo(teacherNo);
     }
 
