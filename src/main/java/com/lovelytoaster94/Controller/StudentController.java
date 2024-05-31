@@ -24,7 +24,7 @@ public class StudentController {
 
     @RequestMapping(value = "/all", method = RequestMethod.GET)
     @ResponseBody
-    public String allStudentInfo() {
+    public Result allStudentInfo() {
         List<Student> studentData = studentService.allStudentInfo();
         JSONObject jsonObject = new JSONObject();
         JSONArray jsonArray = JSONArray.parseArray(JSONArray.toJSONString(studentData));
@@ -37,46 +37,39 @@ public class StudentController {
         jsonObject.put("womanCount", studentData.size() - manCount);
         jsonObject.put("totalCount", studentData.size());
         jsonObject.put("data", jsonArray);
-        return jsonObject.toJSONString();
+        return new Result(Code.SEARCH_SUCCESS, "查询成功", jsonObject);
     }
 
     @RequestMapping(value = "/modify", method = RequestMethod.POST)
     @ResponseBody
-    public String modifyStudentInfo(Student student) {
-        JSONObject jsonObject = new JSONObject();
+    public Result modifyStudentInfo(Student student) {
         boolean data = studentService.modifyStudentInfo(student);
-        if (!data) {
-            jsonObject.put("message", false);
-            return jsonObject.toJSONString();
+        if (data) {
+            return new Result(Code.MODIFY_SUCCESS, "修改成功");
+        } else {
+            return new Result(Code.MODIFY_FAILED, "修改失败");
         }
-        jsonObject.put("message", true);
-        return jsonObject.toJSONString();
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @ResponseBody
-    public String deleteStudentInfo(@RequestParam("studentNo") String studentNo) {
-        JSONObject jsonObject = new JSONObject();
+    public Result deleteStudentInfo(@RequestParam("studentNo") String studentNo) {
         boolean data = studentService.deleteStudentInfo(studentNo);
-        if (!data) {
-            jsonObject.put("message", false);
-            return jsonObject.toJSONString();
+        if (data) {
+            return new Result(Code.DELETE_SUCCESS, "删除成功");
+        } else {
+            return new Result(Code.DELETE_FAILED, "删除失败");
         }
-        jsonObject.put("message", true);
-        return jsonObject.toJSONString();
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     @ResponseBody
-    public String searchTeacherInfo(Student student) {
+    public Result searchTeacherInfo(Student student) {
         List<Student> data = studentService.searchStudentInfo(student);
-        JSONObject jsonObject = new JSONObject();
         if (!data.isEmpty()) {
-            JSONArray jsonArray = JSONArray.parseArray(JSONArray.toJSONString(data));
-            jsonObject.put("data", jsonArray);
+            return new Result(Code.SEARCH_SUCCESS, "查询成功" + "共" + data.size() + "条数据", data);
         } else {
-            jsonObject.put("data", false);
+            return new Result(Code.SEARCH_FAILED, "查询失败");
         }
-        return jsonObject.toJSONString();
     }
 }

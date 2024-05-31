@@ -5,6 +5,8 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.lovelytoaster94.Controller.Code;
+import com.lovelytoaster94.Controller.Result;
 import com.lovelytoaster94.Pojo.User;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -39,32 +41,25 @@ public class JwtUntil {
             decodedJWT = jwtVerifier.verify(token);
             jsonObject.put("userName", decodedJWT.getClaim("userName").asString());
             jsonObject.put("permissions", decodedJWT.getClaim("permissions").asInt());
-            jsonObject.put("verify", true);
             return jsonObject;
         } catch (Exception e) {
-            System.out.println(e.getMessage() + " " + "token failed");
-            jsonObject.put("verify", false);
-            return jsonObject;
+            return null;
         }
     }
 
-    public String loginStatus(HttpServletRequest request, HttpServletResponse response) {
+    public Result loginStatus(HttpServletRequest request, HttpServletResponse response) {
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("token")) {
                     JSONObject data = verifyToken(cookie.getValue());
-                    if (!(Boolean) data.get("verify")) {
-                        response.addHeader("Cache-Control", "no-cache");
-                        response.setStatus(301);
+                    if (data != null) {
+                        return new Result(Code.LOGIN_SUCCESS,"登陆成功",data);
                     }
-                    return data.toJSONString();
                 }
             }
-        } else {
-            response.addHeader("Cache-Control", "no-cache");
-            response.setStatus(301);
         }
-        return null;
+        response.addHeader("Cache-Control", "no-cache");
+        return new Result(Code.LOGIN_FAILED,"登陆失败");
     }
 }

@@ -23,24 +23,23 @@ public class UserController {
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     @ResponseBody
-    public String loginVerify(User user, HttpServletResponse response) {
+    public Result loginVerify(User user, HttpServletResponse response) {
         User data = userService.loginVerify(user);
         JwtUntil jwtUntil = new JwtUntil();
         JSONObject jsonData = new JSONObject();
         if (data != null) {
             jsonData.put("userName", data.getUserName());
             jsonData.put("permissions", data.getPermission());
-            jsonData.put("verify", true);
             response.addHeader("Set-Cookie", "token=" + jwtUntil.createToken(data) + ";Path=/;HttpOnly");
+            return new Result(Code.LOGIN_SUCCESS, "登陆成功", jsonData);
         } else {
-            jsonData.put("verify", false);
+            return new Result(Code.LOGIN_FAILED, "登陆失败");
         }
-        return jsonData.toJSONString();
     }
 
     @RequestMapping(value = "/login/status", method = RequestMethod.GET)
     @ResponseBody
-    public String loginStatus(HttpServletRequest request, HttpServletResponse response) {
+    public Result loginStatus(HttpServletRequest request, HttpServletResponse response) {
         JwtUntil jwtUntil = new JwtUntil();
         return jwtUntil.loginStatus(request, response);
     }
