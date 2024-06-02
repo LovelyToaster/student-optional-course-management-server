@@ -13,4 +13,6 @@ public interface TeacherMapper {
     boolean deleteTeacherInfo(@Param("teacherNo") String teacherNo);
 
     List<Teacher> searchTeacherInfo(Teacher teacher);
+
+    boolean addTeacherInfo(Teacher teacher);
 }

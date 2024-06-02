@@ -29,4 +29,8 @@ public class TeacherServiceImpl implements TeacherService {
     public List<Teacher> searchTeacherInfo(Teacher teacher) {
         return teacherMapper.searchTeacherInfo(teacher);
     }
+
+    public boolean addTeacherInfo(Teacher teacher) {
+        return teacherMapper.addTeacherInfo(teacher);
+    }
 }

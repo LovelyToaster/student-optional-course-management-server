@@ -57,4 +57,12 @@
             </if>
         </where>
     </select>
+    <insert id="addTeacherInfo" parameterType="com.lovelytoaster94.Pojo.Teacher">
+        <selectKey keyProperty="teacherNo" resultType="string" order="BEFORE">
+            select if(max(teacherNo) is null, 100001, max(teacherNo) + 1) as newId from teacher
+        </selectKey>
+        insert into teacher
+        (teacherNo,teacherName,teacherSex,teacherAge,teacherDegree,teacherJob,teacherGraduateInstitutions,teacherHealth)
+        value(#{teacherNo},#{teacherName},#{teacherSex},#{teacherAge},#{teacherDegree},#{teacherJob},#{teacherGraduateInstitutions},#{teacherHealth})
+    </insert>
 </mapper>

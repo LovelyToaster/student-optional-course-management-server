@@ -4,6 +4,7 @@ import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.lovelytoaster94.Pojo.Teacher;
 import com.lovelytoaster94.Service.TeacherService;
+import org.checkerframework.checker.units.qual.C;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping(value = "/teacher", method = RequestMethod.GET)
@@ -70,5 +72,21 @@ public class TeacherController {
         } else {
             return new Result(Code.SEARCH_FAILED, "查询失败");
         }
+    }
+
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    @ResponseBody
+    public Result addTeacherInfo(Teacher teacher) {
+        JSONObject jsonObject = JSONObject.parseObject(JSONObject.toJSONString(teacher));
+        for (Map.Entry<String, Object> entry : jsonObject.entrySet()) {
+            if (entry.getValue() == null || entry.getValue().equals(0)) {
+                return new Result(Code.ADD_FAILED, "添加失败,请输入数据");
+            }
+        }
+        boolean data = teacherService.addTeacherInfo(teacher);
+        if (data) {
+            return new Result(Code.ADD_SUCCESS, "添加成功");
+        }
+        return new Result(Code.ADD_FAILED, "添加失败");
     }
 }

@@ -12,4 +12,6 @@ public interface TeacherService {
     boolean deleteTeacherInfo(String teacherNo);
 
     List<Teacher> searchTeacherInfo(Teacher teacher);
+
+    boolean addTeacherInfo(Teacher teacher);
 }
