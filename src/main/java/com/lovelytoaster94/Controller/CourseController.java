@@ -61,6 +61,8 @@ public class CourseController {
         }
     }
 
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    @ResponseBody
     public Result addCourseInfo(Course course) {
         JSONObject jsonObject = JSONObject.parseObject(JSONObject.toJSONString(course));
         for (Map.Entry<String, Object> entry : jsonObject.entrySet()) {
