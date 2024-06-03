@@ -29,4 +29,8 @@ public class CourseServiceImpl implements CourseService {
     public List<Course> searchCourseInfo(Course course) {
         return courseMapper.searchCourseInfo(course);
     }
+
+    public boolean addCourseInfo(Course course) {
+        return courseMapper.addCourseInfo(course);
+    }
 }

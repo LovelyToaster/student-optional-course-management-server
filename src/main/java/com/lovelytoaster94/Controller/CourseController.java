@@ -1,5 +1,6 @@
 package com.lovelytoaster94.Controller;
 
+import com.alibaba.fastjson2.JSONObject;
 import com.lovelytoaster94.Pojo.Course;
 import com.lovelytoaster94.Pojo.Student;
 import com.lovelytoaster94.Service.CourseService;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping(value = "/course")
@@ -57,5 +59,19 @@ public class CourseController {
         } else {
             return new Result(Code.SEARCH_FAILED, "查询失败");
         }
+    }
+
+    public Result addCourseInfo(Course course) {
+        JSONObject jsonObject = JSONObject.parseObject(JSONObject.toJSONString(course));
+        for (Map.Entry<String, Object> entry : jsonObject.entrySet()) {
+            if (entry.getValue() == null || entry.getValue().equals(0)) {
+                return new Result(Code.ADD_FAILED, "添加失败,请输入数据");
+            }
+        }
+        boolean data = courseService.addCourseInfo(course);
+        if (data) {
+            return new Result(Code.ADD_SUCCESS, "添加成功");
+        }
+        return new Result(Code.ADD_FAILED, "添加失败");
     }
 }

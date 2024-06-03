@@ -12,4 +12,6 @@ public interface CourseService {
     boolean deleteCourseInfo(String courseNo);
 
     List<Course> searchCourseInfo(Course course);
+
+    boolean addCourseInfo(Course course);
 }

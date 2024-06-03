@@ -13,4 +13,6 @@ public interface CourseMapper {
     boolean deleteCourseInfo(@Param("courseNo") String courseNo);
 
     List<Course> searchCourseInfo(Course course);
+
+    boolean addCourseInfo(Course course);
 }
