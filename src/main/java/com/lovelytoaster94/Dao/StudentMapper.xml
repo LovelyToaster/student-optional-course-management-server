@@ -46,4 +46,12 @@
             </if>
         </where>
     </select>
+    <insert id="addStudentInfo" parameterType="com.lovelytoaster94.Pojo.Student">
+        <selectKey keyProperty="studentNo" resultType="string" order="BEFORE">
+            select if(max(studentNo) is null, 100001, max(studentNo) + 1) as newId from student
+        </selectKey>
+        insert into student
+        (studentNo,studentName,studentSex,studentAge,studentFaculties,studentClass)
+        value(#{studentNo},#{studentName},#{studentSex},#{studentAge},#{studentFaculties},#{studentClass})
+    </insert>
 </mapper>

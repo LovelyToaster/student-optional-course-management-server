@@ -12,4 +12,6 @@ public interface StudentService {
     boolean deleteStudentInfo(String studentNo);
 
     List<Student> searchStudentInfo(Student student);
+
+    boolean addStudentInfo(Student student);
 }

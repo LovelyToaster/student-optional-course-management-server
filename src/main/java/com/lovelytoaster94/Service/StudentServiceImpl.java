@@ -30,4 +30,8 @@ public class StudentServiceImpl implements StudentService {
     public List<Student> searchStudentInfo(Student student) {
         return studentMapper.searchStudentInfo(student);
     }
+
+    public boolean addStudentInfo(Student student) {
+        return studentMapper.addStudentInfo(student);
+    }
 }
