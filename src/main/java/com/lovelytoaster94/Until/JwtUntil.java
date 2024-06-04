@@ -10,6 +10,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -58,6 +59,6 @@ public class JwtUntil {
             }
         }
         response.addHeader("Cache-Control", "no-cache");
-        return new Result(Code.LOGIN_FAILED,"登陆失败");
+        return new Result(Code.LOGIN_FAILED,"登录验证失败，可能token已经失效");
     }
 }
