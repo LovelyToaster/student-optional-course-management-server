@@ -3,7 +3,8 @@ package com.lovelytoaster94.Pojo;
 public class Course {
     private String courseNo;
     private String courseName;
-    private String courseTeacher;
+    private String teacherNo;
+    private String teacherName;
 
     public String getCourseNo() {
         return courseNo;
@@ -21,11 +22,19 @@ public class Course {
         this.courseName = courseName;
     }
 
-    public String getCourseTeacher() {
-        return courseTeacher;
+    public String getTeacherNo() {
+        return teacherNo;
     }
 
-    public void setCourseTeacher(String courseTeacher) {
-        this.courseTeacher = courseTeacher;
+    public void setTeacherNo(String teacherNo) {
+        this.teacherNo = teacherNo;
+    }
+
+    public String getTeacherName() {
+        return teacherName;
+    }
+
+    public void setTeacherName(String teacherName) {
+        this.teacherName = teacherName;
     }
 }
