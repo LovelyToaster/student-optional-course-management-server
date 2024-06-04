@@ -3,8 +3,10 @@ package com.lovelytoaster94.Controller;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.lovelytoaster94.Pojo.Student;
-import com.lovelytoaster94.Pojo.Teacher;
 import com.lovelytoaster94.Service.StudentService;
+import com.lovelytoaster94.Until.Code;
+import com.lovelytoaster94.Until.Result;
+import com.lovelytoaster94.Until.ManagementResultInfo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,6 +21,7 @@ import java.util.Map;
 public class StudentController {
 
     private final StudentService studentService;
+    private final ManagementResultInfo managementResultInfo = new ManagementResultInfo();
 
     public StudentController(StudentService studentService) {
         this.studentService = studentService;
@@ -39,40 +42,28 @@ public class StudentController {
         jsonObject.put("womanCount", studentData.size() - manCount);
         jsonObject.put("totalCount", studentData.size());
         jsonObject.put("data", jsonArray);
-        return new Result(Code.SEARCH_SUCCESS, "查询成功", jsonObject);
+        return managementResultInfo.allInfo(jsonObject);
     }
 
     @RequestMapping(value = "/modify", method = RequestMethod.POST)
     @ResponseBody
     public Result modifyStudentInfo(Student student) {
         boolean data = studentService.modifyStudentInfo(student);
-        if (data) {
-            return new Result(Code.MODIFY_SUCCESS, "修改成功");
-        } else {
-            return new Result(Code.MODIFY_FAILED, "修改失败");
-        }
+        return managementResultInfo.modifyInfo(data);
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @ResponseBody
     public Result deleteStudentInfo(@RequestParam("studentNo") String studentNo) {
         boolean data = studentService.deleteStudentInfo(studentNo);
-        if (data) {
-            return new Result(Code.DELETE_SUCCESS, "删除成功");
-        } else {
-            return new Result(Code.DELETE_FAILED, "删除失败");
-        }
+        return managementResultInfo.deleteInfo(data);
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     @ResponseBody
     public Result searchTeacherInfo(Student student) {
         List<Student> data = studentService.searchStudentInfo(student);
-        if (!data.isEmpty()) {
-            return new Result(Code.SEARCH_SUCCESS, "查询成功" + "共" + data.size() + "条数据", data);
-        } else {
-            return new Result(Code.SEARCH_FAILED, "查询失败");
-        }
+        return managementResultInfo.searchInfo(data);
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
@@ -85,9 +76,6 @@ public class StudentController {
             }
         }
         boolean data = studentService.addStudentInfo(student);
-        if (data) {
-            return new Result(Code.ADD_SUCCESS, "添加成功");
-        }
-        return new Result(Code.ADD_FAILED, "添加失败");
+        return managementResultInfo.addInfo(data);
     }
 }

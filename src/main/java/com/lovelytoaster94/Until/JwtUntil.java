@@ -5,8 +5,6 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.lovelytoaster94.Controller.Code;
-import com.lovelytoaster94.Controller.Result;
 import com.lovelytoaster94.Pojo.User;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;

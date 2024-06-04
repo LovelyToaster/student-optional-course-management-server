@@ -1,4 +1,4 @@
-package com.lovelytoaster94.Controller;
+package com.lovelytoaster94.Until;
 
 public class Code {
     public final static int SERVICE_FAILED = 500;

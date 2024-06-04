@@ -1,4 +1,4 @@
-package com.lovelytoaster94.Controller;
+package com.lovelytoaster94.Until;
 
 public class Result {
     private int code;

@@ -3,7 +3,9 @@ package com.lovelytoaster94.Controller;
 import com.alibaba.fastjson2.JSONObject;
 import com.lovelytoaster94.Pojo.User;
 import com.lovelytoaster94.Service.UserService;
+import com.lovelytoaster94.Until.Code;
 import com.lovelytoaster94.Until.JwtUntil;
+import com.lovelytoaster94.Until.Result;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
@@ -33,7 +35,7 @@ public class UserController {
             response.addHeader("Set-Cookie", "token=" + jwtUntil.createToken(data) + ";Path=/;HttpOnly");
             return new Result(Code.LOGIN_SUCCESS, "登陆成功", jsonData);
         } else {
-            return new Result(Code.LOGIN_FAILED, "登陆失败");
+            return new Result(Code.LOGIN_FAILED, "登陆失败，用户名或密码错误");
         }
     }
 

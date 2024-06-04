@@ -1,5 +1,7 @@
 package com.lovelytoaster94.Controller;
 
+import com.lovelytoaster94.Until.Code;
+import com.lovelytoaster94.Until.Result;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;

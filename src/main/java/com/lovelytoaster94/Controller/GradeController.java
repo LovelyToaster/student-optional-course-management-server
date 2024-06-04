@@ -2,6 +2,9 @@ package com.lovelytoaster94.Controller;
 
 import com.lovelytoaster94.Pojo.Grade;
 import com.lovelytoaster94.Service.GradeService;
+import com.lovelytoaster94.Until.Code;
+import com.lovelytoaster94.Until.Result;
+import com.lovelytoaster94.Until.ManagementResultInfo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -14,6 +17,7 @@ import java.util.List;
 @RequestMapping(value = "/grade")
 public class GradeController {
     private final GradeService gradeService;
+    private final ManagementResultInfo managementResultInfo = new ManagementResultInfo();
 
     public GradeController(GradeService gradeService) {
         this.gradeService = gradeService;
@@ -22,52 +26,37 @@ public class GradeController {
     @RequestMapping(value = "/all", method = RequestMethod.GET)
     @ResponseBody
     public Result allGradeInfo() {
-        return new Result(Code.SEARCH_SUCCESS, "查询成功", gradeService.allGradeInfo());
+        return managementResultInfo.allInfo(gradeService.allGradeInfo());
     }
 
     @RequestMapping(value = "/modify", method = RequestMethod.POST)
     @ResponseBody
-    public Result modifyStudentInfo(Grade grade) {
+    public Result modifyGradeInfo(Grade grade) {
         boolean data = gradeService.modifyGradeInfo(grade);
-        if (data) {
-            return new Result(Code.MODIFY_SUCCESS, "修改成功");
-        } else {
-            return new Result(Code.MODIFY_FAILED, "修改失败");
-        }
+        return managementResultInfo.modifyInfo(data);
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @ResponseBody
-    public Result deleteStudentInfo(@RequestParam("no") String no) {
+    public Result deleteGradeInfo(@RequestParam("no") String no) {
         boolean data = gradeService.deleteGradeInfo(no);
-        if (data) {
-            return new Result(Code.DELETE_SUCCESS, "删除成功");
-        } else {
-            return new Result(Code.DELETE_FAILED, "删除失败");
-        }
+        return managementResultInfo.deleteInfo(data);
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     @ResponseBody
-    public Result searchTeacherInfo(Grade grade) {
+    public Result searchGradeInfo(Grade grade) {
         List<Grade> data = gradeService.searchGradeInfo(grade);
-        if (!data.isEmpty()) {
-            return new Result(Code.SEARCH_SUCCESS, "查询成功" + "共" + data.size() + "条数据", data);
-        } else {
-            return new Result(Code.SEARCH_FAILED, "查询失败");
-        }
+        return managementResultInfo.searchInfo(data);
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @ResponseBody
-    public Result addStudentInfo(Grade grade) {
+    public Result addGradeInfo(Grade grade) {
         if (grade.getStudentNo() == null || grade.getCourseNo() == null || grade.getGrade() == 0) {
             return new Result(Code.ADD_FAILED, "添加失败,请输入数据");
         }
         boolean data = gradeService.addGradeInfo(grade);
-        if (data) {
-            return new Result(Code.ADD_SUCCESS, "添加成功");
-        }
-        return new Result(Code.ADD_FAILED, "添加失败");
+        return managementResultInfo.addInfo(data);
     }
 }
