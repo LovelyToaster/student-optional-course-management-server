@@ -30,4 +30,8 @@ public class GradeServiceImpl implements GradeService {
     public List<Grade> searchGradeInfo(Grade grade) {
         return gradeMapper.searchGradeInfo(grade);
     }
+
+    public boolean addGradeInfo(Grade grade) {
+        return gradeMapper.addGradeInfo(grade);
+    }
 }

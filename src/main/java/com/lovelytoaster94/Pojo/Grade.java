@@ -6,7 +6,7 @@ public class Grade {
     String studentName;
     String courseNo;
     String courseName;
-    String grade;
+    int grade;
 
     public String getNo() {
         return no;
@@ -32,11 +32,11 @@ public class Grade {
         this.courseNo = courseNo;
     }
 
-    public String getGrade() {
+    public int getGrade() {
         return grade;
     }
 
-    public void setGrade(String grade) {
+    public void setGrade(int grade) {
         this.grade = grade;
     }
 

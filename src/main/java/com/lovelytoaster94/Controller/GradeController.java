@@ -57,4 +57,17 @@ public class GradeController {
             return new Result(Code.SEARCH_FAILED, "查询失败");
         }
     }
+
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    @ResponseBody
+    public Result addStudentInfo(Grade grade) {
+        if (grade.getStudentNo() == null || grade.getCourseNo() == null || grade.getGrade() == 0) {
+            return new Result(Code.ADD_FAILED, "添加失败,请输入数据");
+        }
+        boolean data = gradeService.addGradeInfo(grade);
+        if (data) {
+            return new Result(Code.ADD_SUCCESS, "添加成功");
+        }
+        return new Result(Code.ADD_FAILED, "添加失败");
+    }
 }

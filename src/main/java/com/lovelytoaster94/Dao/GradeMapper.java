@@ -13,4 +13,6 @@ public interface GradeMapper {
     boolean deleteGradeInfo(@Param("no") String no);
 
     List<Grade> searchGradeInfo(Grade grade);
+
+    boolean addGradeInfo(Grade grade);
 }

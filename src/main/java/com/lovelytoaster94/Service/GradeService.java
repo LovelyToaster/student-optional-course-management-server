@@ -12,4 +12,6 @@ public interface GradeService {
     boolean deleteGradeInfo(String no);
 
     List<Grade> searchGradeInfo(Grade grade);
+
+    boolean addGradeInfo(Grade grade);
 }
