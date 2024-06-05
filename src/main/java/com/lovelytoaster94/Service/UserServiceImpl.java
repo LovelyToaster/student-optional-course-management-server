@@ -16,4 +16,8 @@ public class UserServiceImpl implements UserService {
     public User loginVerify(User user) {
         return userMapper.loginVerify(user);
     }
+
+    public boolean setPassword(String userName, String newPassword) {
+        return userMapper.setPassword(userName, newPassword);
+    }
 }

@@ -4,4 +4,6 @@ import com.lovelytoaster94.Pojo.User;
 
 public interface UserService {
     User loginVerify(User user);
+
+    boolean setPassword(String userName, String newPassword);
 }

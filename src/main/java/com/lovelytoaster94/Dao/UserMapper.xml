@@ -9,4 +9,9 @@
         WHERE userName = #{userName}
           AND userPassword = #{userPassword}
     </select>
+    <update id="setPassword" parameterType="string">
+        update login
+        set userPassword = #{newPassword}
+        where userName = #{userName}
+    </update>
 </mapper>

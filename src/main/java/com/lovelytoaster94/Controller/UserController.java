@@ -9,9 +9,7 @@ import com.lovelytoaster94.Until.Result;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping(value = "/user", method = RequestMethod.GET)
@@ -44,5 +42,21 @@ public class UserController {
     public Result loginStatus(HttpServletRequest request, HttpServletResponse response) {
         JwtUntil jwtUntil = new JwtUntil();
         return jwtUntil.loginStatus(request, response);
+    }
+
+    @RequestMapping(value = "/setPassword", method = RequestMethod.POST)
+    @ResponseBody
+    public Result setPassword(@ModelAttribute("userName") String userName, @ModelAttribute("userPassword") String userPassword, @ModelAttribute("newPassword") String newPassword) {
+        User user = new User();
+        user.setUserName(userName);
+        user.setUserPassword(userPassword);
+        User data = userService.loginVerify(user);
+        if (data != null) {
+            boolean isSetSuccess = userService.setPassword(userName, newPassword);
+            if (isSetSuccess) {
+                return new Result(Code.MODIFY_SUCCESS, "密码修改成功！");
+            }
+        }
+        return new Result(Code.MODIFY_FAILED, "密码修改失败，请检查当前密码是否正确");
     }
 }
