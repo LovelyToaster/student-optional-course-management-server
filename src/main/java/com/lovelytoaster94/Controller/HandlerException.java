@@ -12,6 +12,6 @@ public class HandlerException {
     @ExceptionHandler({Exception.class})
     @ResponseBody
     public Result handleException(Exception e) {
-        return new Result(Code.SERVICE_FAILED,"发生错误" , e.toString());
+        return new Result(Code.SERVICE_FAILED, "发生错误，请联系管理员", e.toString());
     }
 }
