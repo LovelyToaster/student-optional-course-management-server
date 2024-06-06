@@ -11,7 +11,7 @@
             <!--默认拦截的连接-->
             <mvc:mapping path="/**"/>
             <!--不拦截的连接-->
-            <mvc:exclude-mapping path="/user/**"/>
+            <mvc:exclude-mapping path="/user/login"/>
             <bean class="com.lovelytoaster94.Filter.LoginHandler"/>
         </mvc:interceptor>
     </mvc:interceptors>
@@ -28,5 +28,9 @@
             <ref bean="stringHttpMessageConverter"/>
         </mvc:message-converters>
     </mvc:annotation-driven>
+
+    <bean id="multipartResolver" class="org.springframework.web.multipart.support.StandardServletMultipartResolver">
+    </bean>
+
 
 </beans>

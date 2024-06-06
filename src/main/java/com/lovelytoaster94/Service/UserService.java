@@ -6,4 +6,6 @@ public interface UserService {
     User loginVerify(User user);
 
     boolean setPassword(String userName, String newPassword);
+
+    boolean setAvatar(String userName,String avatarName);
 }

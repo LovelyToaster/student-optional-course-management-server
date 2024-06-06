@@ -7,4 +7,6 @@ public interface UserMapper {
     User loginVerify(User user);
 
     boolean setPassword(@Param("userName") String userName, @Param("newPassword") String newPassword);
+
+    boolean setAvatar(@Param("userName") String userName,@Param("avatarName") String avatarName);
 }

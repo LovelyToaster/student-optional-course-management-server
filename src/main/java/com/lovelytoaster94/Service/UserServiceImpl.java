@@ -20,4 +20,8 @@ public class UserServiceImpl implements UserService {
     public boolean setPassword(String userName, String newPassword) {
         return userMapper.setPassword(userName, newPassword);
     }
+
+    public boolean setAvatar(String userName, String avatarName) {
+        return userMapper.setAvatar(userName, avatarName);
+    }
 }

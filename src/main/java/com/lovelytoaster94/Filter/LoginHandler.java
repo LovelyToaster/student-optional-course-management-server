@@ -1,6 +1,7 @@
 package com.lovelytoaster94.Filter;
 
 import com.alibaba.fastjson2.JSONObject;
+import com.lovelytoaster94.Pojo.User;
 import com.lovelytoaster94.Until.Code;
 import com.lovelytoaster94.Until.JwtUntil;
 import com.lovelytoaster94.Until.Result;
@@ -14,8 +15,9 @@ public class LoginHandler implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         JwtUntil jwtUntil = new JwtUntil();
         Result result = jwtUntil.loginStatus(request, response);
+        JSONObject jsonObject;
         if (result.getCode() == Code.LOGIN_FAILED) {
-            JSONObject jsonObject = new JSONObject();
+            jsonObject = new JSONObject();
             jsonObject.put("code", Code.LOGIN_FAILED);
             jsonObject.put("message", result.getMessage());
             jsonObject.put("data", result.getData());
@@ -23,6 +25,9 @@ public class LoginHandler implements HandlerInterceptor {
             response.getWriter().write(jsonObject.toString());
             return false;
         }
+        jsonObject = (JSONObject) result.getData();
+        request.setAttribute("userName", jsonObject.get("userName"));
+        request.setAttribute("permissions", jsonObject.get("permissions"));
         return HandlerInterceptor.super.preHandle(request, response, handler);
     }
 }

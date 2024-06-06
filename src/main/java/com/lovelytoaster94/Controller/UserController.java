@@ -10,6 +10,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Date;
+import java.util.UUID;
 
 @Controller
 @RequestMapping(value = "/user", method = RequestMethod.GET)
@@ -19,6 +25,8 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
+
+    private static final String UPLOAD_FOLDER = "C:\\Users\\Lovel\\OneDrive\\LovelyToaster94\\Program\\JetBrains_IDEA\\Project\\student-optional-course-management-server\\src\\main\\resources\\img\\";
 
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
@@ -58,5 +66,22 @@ public class UserController {
             }
         }
         return new Result(Code.MODIFY_FAILED, "密码修改失败，请检查当前密码是否正确");
+    }
+
+    @RequestMapping(value = "/setAvatar", method = RequestMethod.POST)
+    @ResponseBody
+    public Result setAvatar(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
+        String userName = request.getAttribute("userName").toString();
+        String fileName = String.valueOf(UUID.nameUUIDFromBytes(userName.getBytes()));
+        boolean isSuccess = userService.setAvatar(userName, fileName);
+        if (!isSuccess) {
+            return new Result(Code.MODIFY_FAILED, "头像修改失败");
+        }
+        try {
+            file.transferTo(new File(UPLOAD_FOLDER + fileName + ".jpg"));
+        } catch (IOException e) {
+            return new Result(Code.SERVICE_FAILED, "发生错误，请联系管理员", e.getMessage());
+        }
+        return new Result(Code.MODIFY_SUCCESS, "头像修改成功");
     }
 }
