@@ -27,6 +27,7 @@ public class JwtUntil {
                 .withHeader(hashMap)
                 .withClaim("userName", user.getUserName())
                 .withClaim("permissions", user.getPermission())
+                .withClaim("avatarName", user.getAvatarName())
                 .withExpiresAt(expirationDate)
                 .withIssuedAt(new Date())
                 .sign(Algorithm.HMAC256(secretToken));
@@ -40,6 +41,7 @@ public class JwtUntil {
             decodedJWT = jwtVerifier.verify(token);
             jsonObject.put("userName", decodedJWT.getClaim("userName").asString());
             jsonObject.put("permissions", decodedJWT.getClaim("permissions").asInt());
+            jsonObject.put("avatarName", decodedJWT.getClaim("avatarName").asString());
             return jsonObject;
         } catch (Exception e) {
             return null;
@@ -53,12 +55,12 @@ public class JwtUntil {
                 if (cookie.getName().equals("token")) {
                     JSONObject data = verifyToken(cookie.getValue());
                     if (data != null) {
-                        return new Result(Code.LOGIN_SUCCESS,"登陆成功",data);
+                        return new Result(Code.LOGIN_SUCCESS, "登陆成功", data);
                     }
                 }
             }
         }
         response.addHeader("Cache-Control", "no-cache");
-        return new Result(Code.LOGIN_FAILED,"登录验证失败，可能token已经失效");
+        return new Result(Code.LOGIN_FAILED, "登录验证失败，可能token已经失效");
     }
 }

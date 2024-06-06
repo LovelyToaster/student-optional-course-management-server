@@ -4,6 +4,7 @@ public class User {
     private String userName;
     private String userPassword;
     private int permissions;
+    private String avatarName;
 
     public String getUserName() {
         return userName;
@@ -29,4 +30,11 @@ public class User {
         this.userPassword = userPassword;
     }
 
+    public String getAvatarName() {
+        return avatarName;
+    }
+
+    public void setAvatarName(String avatarName) {
+        this.avatarName = avatarName;
+    }
 }

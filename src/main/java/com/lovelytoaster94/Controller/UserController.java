@@ -14,7 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Date;
 import java.util.UUID;
 
 @Controller
@@ -26,8 +25,8 @@ public class UserController {
         this.userService = userService;
     }
 
-    private static final String UPLOAD_FOLDER = "C:\\Users\\Lovel\\OneDrive\\LovelyToaster94\\Program\\JetBrains_IDEA\\Project\\student-optional-course-management-server\\src\\main\\resources\\img\\";
-
+    private static final String UPLOAD_FOLDER = "C:\\Users\\Lovel\\OneDrive\\LovelyToaster94\\Program\\JetBrains_IDEA\\Project\\student-optional-course-management-web\\src\\assets\\img\\";
+    private static final String GET_AVATAR_PATH = "http://localhost:5173/src/assets/img/";
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     @ResponseBody
@@ -38,6 +37,7 @@ public class UserController {
         if (data != null) {
             jsonData.put("userName", data.getUserName());
             jsonData.put("permissions", data.getPermission());
+            jsonData.put("avatarPath", GET_AVATAR_PATH + data.getAvatarName() + ".jpg");
             response.addHeader("Set-Cookie", "token=" + jwtUntil.createToken(data) + ";Path=/;HttpOnly");
             return new Result(Code.LOGIN_SUCCESS, "登陆成功", jsonData);
         } else {
@@ -45,11 +45,15 @@ public class UserController {
         }
     }
 
-    @RequestMapping(value = "/login/status", method = RequestMethod.GET)
+    @RequestMapping(value = "/status", method = RequestMethod.GET)
     @ResponseBody
     public Result loginStatus(HttpServletRequest request, HttpServletResponse response) {
         JwtUntil jwtUntil = new JwtUntil();
-        return jwtUntil.loginStatus(request, response);
+        Result result = jwtUntil.loginStatus(request, response);
+        JSONObject jsonData = (JSONObject) result.getData();
+        jsonData.put("avatarPath", GET_AVATAR_PATH + jsonData.get("avatarName") + ".jpg");
+        jsonData.remove("avatarName");
+        return new Result(Code.LOGIN_SUCCESS, "获取登录信息成功", jsonData);
     }
 
     @RequestMapping(value = "/setPassword", method = RequestMethod.POST)
@@ -82,6 +86,6 @@ public class UserController {
         } catch (IOException e) {
             return new Result(Code.SERVICE_FAILED, "发生错误，请联系管理员", e.getMessage());
         }
-        return new Result(Code.MODIFY_SUCCESS, "头像修改成功");
+        return new Result(Code.MODIFY_SUCCESS, "头像修改成功", GET_AVATAR_PATH + fileName + ".jpg");
     }
 }
