@@ -14,13 +14,6 @@ public class User {
         this.userName = userName;
     }
 
-    public int getPermission() {
-        return permissions;
-    }
-
-    public void setPermission(int permission) {
-        this.permissions = permission;
-    }
 
     public String getUserPassword() {
         return userPassword;
@@ -36,5 +29,13 @@ public class User {
 
     public void setAvatarName(String avatarName) {
         this.avatarName = avatarName;
+    }
+
+    public int getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(int permissions) {
+        this.permissions = permissions;
     }
 }

@@ -26,7 +26,7 @@ public class JwtUntil {
         return JWT.create()
                 .withHeader(hashMap)
                 .withClaim("userName", user.getUserName())
-                .withClaim("permissions", user.getPermission())
+                .withClaim("permissions", user.getPermissions())
                 .withClaim("avatarName", user.getAvatarName())
                 .withExpiresAt(expirationDate)
                 .withIssuedAt(new Date())

@@ -4,6 +4,8 @@ import com.lovelytoaster94.Dao.UserMapper;
 import com.lovelytoaster94.Pojo.User;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
@@ -23,5 +25,17 @@ public class UserServiceImpl implements UserService {
 
     public boolean setAvatar(String userName, String avatarName) {
         return userMapper.setAvatar(userName, avatarName);
+    }
+
+    public List<User> allUserInfo() {
+        return userMapper.allUserInfo();
+    }
+
+    public List<User> searchUserInfo(User user) {
+        return userMapper.searchUserInfo(user);
+    }
+
+    public boolean resetPassword(String userName) {
+        return userMapper.resetPassword(userName);
     }
 }

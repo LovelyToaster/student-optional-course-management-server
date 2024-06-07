@@ -19,4 +19,25 @@
         set avatarName = #{avatarName}
         where userName = #{userName}
     </update>
+    <select id="allUserInfo" resultType="com.lovelytoaster94.Pojo.User">
+        SELECT *
+        FROM login
+    </select>
+    <select id="searchUserInfo" parameterType="com.lovelytoaster94.Pojo.User" resultType="com.lovelytoaster94.Pojo.User">
+        SELECT *
+        FROM login
+        <where>
+            <if test="userName!=null">
+                and userName like "%"#{userName}"%"
+            </if>
+            <if test="permissions!=0">
+                and permissions=#{permissions}
+            </if>
+        </where>
+    </select>
+    <insert id="resetPassword">
+        update login
+        set userPassword="123456"
+        where userName = #{userName}
+    </insert>
 </mapper>
