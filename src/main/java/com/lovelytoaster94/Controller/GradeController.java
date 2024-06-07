@@ -53,7 +53,7 @@ public class GradeController {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @ResponseBody
     public Result addGradeInfo(Grade grade) {
-        if (grade.getStudentNo() == null || grade.getCourseNo() == null || grade.getGrade() == 0) {
+        if (grade.getStudentNo() == null && grade.getCourseNo() == null) {
             return new Result(Code.ADD_FAILED, "添加失败,请输入数据");
         }
         boolean data = gradeService.addGradeInfo(grade);

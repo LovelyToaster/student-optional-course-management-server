@@ -45,7 +45,7 @@
             select if(max(no) is null, 100001, max(no) + 1) as newId from optional_course
         </selectKey>
         insert into optional_course
-        (no,studentNo,courseNo,grade)
-        value(#{no},#{studentNo},#{courseNo},#{grade})
+        (no,studentNo,courseNo)
+        value(#{no},#{studentNo},#{courseNo})
     </insert>
 </mapper>
