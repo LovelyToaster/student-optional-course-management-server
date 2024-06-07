@@ -2,6 +2,7 @@ package com.lovelytoaster94.Until;
 
 public class Code {
     public final static int SERVICE_FAILED = 500;
+    public final static int PERMISSIONS_FAILED = 403;
     public final static int LOGIN_FAILED = 5001;
     public final static int SEARCH_FAILED = 5002;
     public final static int MODIFY_FAILED = 5003;

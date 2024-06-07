@@ -16,6 +16,15 @@
         </mvc:interceptor>
     </mvc:interceptors>
 
+    <context:component-scan base-package="com.lovelytoaster94.Controller"/>
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <!--默认拦截的连接-->
+            <mvc:mapping path="/**"/>
+            <bean class="com.lovelytoaster94.Filter.PermissionsHandler"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
     <mvc:default-servlet-handler/>
 
     <bean id="stringHttpMessageConverter"
