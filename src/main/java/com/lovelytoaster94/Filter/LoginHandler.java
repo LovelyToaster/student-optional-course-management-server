@@ -16,18 +16,21 @@ public class LoginHandler implements HandlerInterceptor {
         JwtUntil jwtUntil = new JwtUntil();
         Result result = jwtUntil.loginStatus(request, response);
         JSONObject jsonObject;
-        if (result.getCode() == Code.LOGIN_FAILED) {
-            jsonObject = new JSONObject();
-            jsonObject.put("code", Code.LOGIN_FAILED);
-            jsonObject.put("message", result.getMessage());
-            jsonObject.put("data", result.getData());
-            response.setContentType("application/json;charset=utf-8");
-            response.getWriter().write(jsonObject.toString());
-            return false;
+        if (!(Boolean) request.getSession().getAttribute("isLoginOut")) {
+            if (result.getCode() == Code.LOGIN_FAILED) {
+                jsonObject = new JSONObject();
+                jsonObject.put("code", Code.LOGIN_FAILED);
+                jsonObject.put("message", result.getMessage());
+                jsonObject.put("data", result.getData());
+                response.setContentType("application/json;charset=utf-8");
+                response.getWriter().write(jsonObject.toString());
+                return false;
+            }
+            jsonObject = (JSONObject) result.getData();
+            request.setAttribute("userName", jsonObject.get("userName"));
+            request.setAttribute("permissions", jsonObject.get("permissions"));
+            return HandlerInterceptor.super.preHandle(request, response, handler);
         }
-        jsonObject = (JSONObject) result.getData();
-        request.setAttribute("userName", jsonObject.get("userName"));
-        request.setAttribute("permissions", jsonObject.get("permissions"));
-        return HandlerInterceptor.super.preHandle(request, response, handler);
+        return false;
     }
 }

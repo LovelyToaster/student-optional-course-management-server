@@ -35,7 +35,8 @@ public class UserController {
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     @ResponseBody
-    public Result loginVerify(User user, HttpServletResponse response) {
+    public Result loginVerify(User user, HttpServletResponse response, HttpServletRequest request) {
+        request.getSession().setAttribute("isLoginOut", false);
         User data = userService.loginVerify(user);
         JwtUntil jwtUntil = new JwtUntil();
         JSONObject jsonData = new JSONObject();
@@ -63,7 +64,7 @@ public class UserController {
 
     @RequestMapping(value = "/setPassword", method = RequestMethod.POST)
     @ResponseBody
-    public Result setPassword(@RequestParam("userName") String userName, @RequestParam("userPassword") String userPassword, @RequestParam("newPassword") String newPassword) {
+    public Result setPassword(@RequestParam("userName") String userName, @RequestParam("userPassword") String userPassword, @RequestParam("newPassword") String newPassword, HttpServletResponse response) {
         User user = new User();
         user.setUserName(userName);
         user.setUserPassword(userPassword);
@@ -71,6 +72,7 @@ public class UserController {
         if (data != null) {
             boolean isSetSuccess = userService.setPassword(userName, newPassword);
             if (isSetSuccess) {
+                response.addHeader("Set-Cookie", "token=" + ";Max-Age=0;Path=/;HttpOnly");
                 return new Result(Code.MODIFY_SUCCESS, "密码修改成功！");
             }
         }
@@ -121,6 +123,13 @@ public class UserController {
         }
     }
 
+    @RequestMapping(value = "/loginOut", method = RequestMethod.GET)
+    @ResponseBody
+    public Result loginOut(HttpServletRequest request, HttpServletResponse response) {
+        response.addHeader("Set-Cookie", "token=" + ";Max-Age=0;Path=/;HttpOnly");
+        request.getSession().setAttribute("isLoginOut", true);
+        return new Result(Code.LOGIN_OUT_SUCCESS, "退出登录成功!");
+    }
 
     private static JSONArray getObjects(List<User> userList) {
         JSONArray jsonArray = new JSONArray();
