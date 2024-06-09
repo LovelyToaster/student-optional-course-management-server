@@ -16,7 +16,7 @@ public class LoginHandler implements HandlerInterceptor {
         JwtUntil jwtUntil = new JwtUntil();
         Result result = jwtUntil.loginStatus(request, response);
         JSONObject jsonObject;
-        if (!(Boolean) request.getSession().getAttribute("isLoginOut")) {
+        if (request.getSession().getAttribute("isLoginOut") != null && !(Boolean) request.getSession().getAttribute("isLoginOut")) {
             if (result.getCode() == Code.LOGIN_FAILED) {
                 jsonObject = new JSONObject();
                 jsonObject.put("code", Code.LOGIN_FAILED);
