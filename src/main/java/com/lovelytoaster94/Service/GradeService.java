@@ -13,5 +13,4 @@ public interface GradeService {
 
     List<Grade> searchGradeInfo(Grade grade);
 
-    boolean addGradeInfo(Grade grade);
 }

@@ -50,13 +50,4 @@ public class GradeController {
         return managementResultInfo.searchInfo(data);
     }
 
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
-    @ResponseBody
-    public Result addGradeInfo(Grade grade) {
-        if (grade.getStudentNo() == null && grade.getCourseNo() == null) {
-            return new Result(Code.ADD_FAILED, "添加失败,请输入数据");
-        }
-        boolean data = gradeService.addGradeInfo(grade);
-        return managementResultInfo.addInfo(data);
-    }
 }
