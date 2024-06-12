@@ -81,9 +81,12 @@ public class UserController {
 
     @RequestMapping(value = "/setAvatar", method = RequestMethod.POST)
     @ResponseBody
-    public Result setAvatar(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
+    public Result setAvatar(@RequestParam("file") MultipartFile file, HttpServletRequest request, HttpServletResponse response) {
         String userName = request.getAttribute("userName").toString();
+        int permissions = (int) request.getAttribute("permissions");
         String fileName = String.valueOf(UUID.nameUUIDFromBytes(userName.getBytes()));
+        User user;
+        JwtUntil jwtUntil;
         boolean isSuccess = userService.setAvatar(userName, fileName);
         if (!isSuccess) {
             return new Result(Code.MODIFY_FAILED, "头像修改失败");
@@ -93,6 +96,12 @@ public class UserController {
         } catch (IOException e) {
             return new Result(Code.SERVICE_FAILED, "发生错误，请联系管理员", e.getMessage());
         }
+        user = new User();
+        jwtUntil = new JwtUntil();
+        user.setUserName(userName);
+        user.setPermissions(permissions);
+        user.setAvatarName(fileName);
+        response.addHeader("Set-Cookie", "token=" + jwtUntil.createToken(user) + ";Path=/;HttpOnly");
         return new Result(Code.MODIFY_SUCCESS, "头像修改成功", GET_AVATAR_PATH + fileName + ".jpg");
     }
 
