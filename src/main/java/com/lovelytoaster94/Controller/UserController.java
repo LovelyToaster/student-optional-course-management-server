@@ -33,7 +33,7 @@ public class UserController {
     private static final String GET_AVATAR_PATH = "http://localhost:5173/src/assets/img/";
 
 
-    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ResponseBody
     public Result loginVerify(User user, HttpServletResponse response, HttpServletRequest request) {
         request.getSession().setAttribute("isLoginOut", false);
