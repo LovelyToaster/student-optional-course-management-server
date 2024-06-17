@@ -40,4 +40,12 @@
             and course.courseName like "%"#{courseName}"%"
         </if>
     </select>
+    <insert id="addGradeInfo" parameterType="com.lovelytoaster94.Pojo.Course">
+        <selectKey keyProperty="no" resultType="string" order="BEFORE">
+            select if(max(no) is null, 100001, max(no) + 1) as newId from optional_course
+        </selectKey>
+        insert into optional_course
+        (no,studentNo,courseNo)
+        value(#{no},#{studentNo},#{courseNo})
+    </insert>
 </mapper>
