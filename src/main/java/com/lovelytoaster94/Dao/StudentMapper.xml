@@ -19,7 +19,11 @@
     <delete id="deleteStudentInfo" parameterType="string">
         delete
         from student
-        where studentNo = #{studentNo}
+        where studentNo = #{studentNo};
+
+        delete
+        from login
+        where userName = #{studentNo}
     </delete>
     <select id="searchStudentInfo" parameterType="com.lovelytoaster94.Pojo.Student"
             resultType="com.lovelytoaster94.Pojo.Student">
@@ -50,8 +54,9 @@
         <selectKey keyProperty="studentNo" resultType="string" order="BEFORE">
             select if(max(studentNo) is null, 100001, max(studentNo) + 1) as newId from student
         </selectKey>
-        insert into student
-        (studentNo,studentName,studentSex,studentAge,studentFaculties,studentClass)
-        value(#{studentNo},#{studentName},#{studentSex},#{studentAge},#{studentFaculties},#{studentClass})
+        insert into student (studentNo,studentName,studentSex,studentAge,studentFaculties,studentClass)
+        value(#{studentNo},#{studentName},#{studentSex},#{studentAge},#{studentFaculties},#{studentClass});
+
+        insert into login (userName, userPassword, permissions) value (#{studentNo},"123456",2)
     </insert>
 </mapper>

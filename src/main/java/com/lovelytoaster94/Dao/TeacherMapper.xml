@@ -23,7 +23,11 @@
     <delete id="deleteTeacherInfo" parameterType="string">
         delete
         from teacher
-        where teacherNo = #{teacherNo}
+        where teacherNo = #{teacherNo};
+
+        delete
+        from login
+        where userName = #{teacherNo}
     </delete>
 
     <select id="searchTeacherInfo" parameterType="com.lovelytoaster94.Pojo.Teacher"
@@ -63,6 +67,10 @@
         </selectKey>
         insert into teacher
         (teacherNo,teacherName,teacherSex,teacherAge,teacherDegree,teacherJob,teacherGraduateInstitutions,teacherHealth)
-        value(#{teacherNo},#{teacherName},#{teacherSex},#{teacherAge},#{teacherDegree},#{teacherJob},#{teacherGraduateInstitutions},#{teacherHealth})
+        value(#{teacherNo},#{teacherName},#{teacherSex},#{teacherAge},#{teacherDegree},#{teacherJob},#{teacherGraduateInstitutions},#{teacherHealth});
+
+        insert into login
+        (userName, userPassword, permissions)
+        value (#{teacherNo},"123456",1)
     </insert>
 </mapper>
