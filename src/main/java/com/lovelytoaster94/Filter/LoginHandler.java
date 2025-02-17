@@ -31,6 +31,11 @@ public class LoginHandler implements HandlerInterceptor {
             request.setAttribute("permissions", jsonObject.get("permissions"));
             return HandlerInterceptor.super.preHandle(request, response, handler);
         }
+        jsonObject = new JSONObject();
+        jsonObject.put("code", Code.LOGIN_FAILED);
+        jsonObject.put("message", "请先登录，在进行操作");
+        response.setContentType("application/json;charset=utf-8");
+        response.getWriter().write(jsonObject.toString());
         return false;
     }
 }
