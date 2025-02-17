@@ -12,6 +12,7 @@
             <mvc:mapping path="/**"/>
             <!--不拦截的连接-->
             <mvc:exclude-mapping path="/user/login"/>
+            <mvc:exclude-mapping path="/user/getAvatar"/>
             <bean class="com.lovelytoaster94.Filter.LoginHandler"/>
         </mvc:interceptor>
     </mvc:interceptors>

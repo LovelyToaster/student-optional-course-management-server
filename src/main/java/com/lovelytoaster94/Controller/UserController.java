@@ -29,8 +29,13 @@ public class UserController {
         this.userService = userService;
     }
 
-    private static final String UPLOAD_FOLDER = "C:\\Users\\Lovel\\OneDrive\\LovelyToaster94\\Program\\JetBrains_IDEA\\Project\\student-optional-course-management-web\\src\\assets\\img\\";
-    private static final String GET_AVATAR_PATH = "http://localhost:5173/src/assets/img/";
+    //  本地
+    private static final String UPLOAD_FOLDER = "C:\\Users\\Lovel\\OneDrive\\LovelyToaster94\\Program\\JetBrains_IDEA\\Project\\student-optional-course-management-web\\src\\assets\\avatar\\";
+    private static final String GET_AVATAR_PATH = "http://localhost:5173/src/assets/avatar/";
+
+//    服务器部署
+//    private static final String UPLOAD_FOLDER = "/var/www/html/ssm/avatar/";
+//    private static final String GET_AVATAR_PATH = "https://ssm.lovelytoaster94.top/avatar/";
 
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
@@ -103,6 +108,18 @@ public class UserController {
         user.setAvatarName(fileName);
         response.addHeader("Set-Cookie", "token=" + jwtUntil.createToken(user) + ";Path=/;HttpOnly");
         return new Result(Code.MODIFY_SUCCESS, "头像修改成功", GET_AVATAR_PATH + fileName + ".jpg");
+    }
+
+    @RequestMapping(value = "/getAvatar", method = RequestMethod.GET)
+    @ResponseBody
+    public Result getAvatar(@RequestParam("userName") String userName) {
+        User user = new User();
+        user.setUserName(userName);
+        List<User> data = userService.searchUserInfo(user);
+        if (data.getFirst().getUserName().equals(userName)) {
+            return new Result(Code.SEARCH_SUCCESS, "获取头像成功", GET_AVATAR_PATH + data.getFirst().getAvatarName() + ".jpg");
+        }
+        return new Result(Code.SEARCH_FAILED, "没有此用户");
     }
 
     @RequestMapping(value = "/all", method = RequestMethod.POST)

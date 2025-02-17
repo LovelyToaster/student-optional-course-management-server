@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class PermissionsHandler implements HandlerInterceptor {
-    private static final List<String> unnecessaryPermissionsPath = Arrays.asList("/teacher/all", "/teacher/search", "/course/all", "/course/search", "/user/login", "/user/status", "/user/loginOut");
+    private static final List<String> unnecessaryPermissionsPath = Arrays.asList("/teacher/all", "/teacher/search", "/course/all", "/course/search", "/user/login", "/user/status", "/user/loginOut", "/user/getAvatar");
 
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         if (!unnecessaryPermissionsPath.contains(request.getServletPath())) {
