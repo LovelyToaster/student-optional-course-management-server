@@ -151,9 +151,8 @@ public class UserController {
 
     @RequestMapping(value = "/loginOut", method = RequestMethod.GET)
     @ResponseBody
-    public Result loginOut(HttpServletRequest request, HttpServletResponse response) {
+    public Result loginOut(HttpServletResponse response) {
         response.addHeader("Set-Cookie", "token=" + ";Max-Age=0;Path=/;HttpOnly");
-        request.getSession().setAttribute("isLoginOut", true);
         return new Result(Code.LOGIN_OUT_SUCCESS, "退出登录成功!");
     }
 

@@ -57,10 +57,11 @@ public class JwtUntil {
                     if (data != null) {
                         return new Result(Code.LOGIN_SUCCESS, "登陆成功", data);
                     }
+                    response.addHeader("Cache-Control", "no-cache");
+                    return new Result(Code.LOGIN_FAILED, "登录验证失败，可能token已经失效");
                 }
             }
         }
-        response.addHeader("Cache-Control", "no-cache");
-        return new Result(Code.LOGIN_FAILED, "登录验证失败，可能token已经失效");
+        return new Result(Code.LOGIN_FAILED,"请先登录，再进行操作");
     }
 }
