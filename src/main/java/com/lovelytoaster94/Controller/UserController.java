@@ -116,8 +116,10 @@ public class UserController {
         User user = new User();
         user.setUserName(userName);
         List<User> data = userService.searchUserInfo(user);
-        if (data.getFirst().getUserName().equals(userName)) {
-            return new Result(Code.SEARCH_SUCCESS, "获取头像成功", GET_AVATAR_PATH + data.getFirst().getAvatarName() + ".jpg");
+        if (data != null && !data.isEmpty()) {
+            if (data.getFirst().getUserName().equals(userName)) {
+                return new Result(Code.SEARCH_SUCCESS, "获取头像成功", GET_AVATAR_PATH + data.getFirst().getAvatarName() + ".jpg");
+            }
         }
         return new Result(Code.SEARCH_FAILED, "没有此用户");
     }
