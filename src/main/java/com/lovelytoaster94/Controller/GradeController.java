@@ -1,5 +1,7 @@
 package com.lovelytoaster94.Controller;
 
+import com.alibaba.fastjson2.JSONObject;
+import com.lovelytoaster94.Pojo.GPA;
 import com.lovelytoaster94.Pojo.Grade;
 import com.lovelytoaster94.Service.GradeService;
 import com.lovelytoaster94.Until.Code;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -58,5 +61,42 @@ public class GradeController {
         }
         boolean data = gradeService.addGradeInfo(grade);
         return managementResultInfo.addInfo(data);
+    }
+
+    @RequestMapping(value = "/getGPA", method = RequestMethod.GET)
+    @ResponseBody
+    public Result getGPA(@RequestParam("studentNo") String studentNo) {
+        Grade grade = new Grade();
+        grade.setStudentNo(studentNo);
+        List<Grade> data = gradeService.searchGradeInfo(grade);
+        List<String> termList = new ArrayList<>();
+        List<GPA> gpaList = new ArrayList<>();
+        JSONObject jsonObject = new JSONObject();
+        for (Grade item : data) {
+            if (!termList.contains(item.getTerm())) {
+                termList.add(item.getTerm());
+            }
+        }
+        double averageGPA=0;
+        for (String item : termList) {
+            double gpa = 0;
+            double credit = 0;
+            for (Grade gradeItem : data) {
+                if (gradeItem.getTerm().equals(item)) {
+                    gpa += gradeItem.getCoursePoint() * gradeItem.getCourseGrade();
+                    credit += gradeItem.getCourseGrade();
+                }
+            }
+            gpa = gpa / credit;
+            averageGPA += gpa;
+            GPA gpaItem = new GPA();
+            gpaItem.setTerm(item);
+            gpaItem.setGpa(gpa);
+            gpaList.add(gpaItem);
+        }
+        averageGPA = averageGPA / termList.size();
+        jsonObject.put("averageGPA", averageGPA);
+        jsonObject.put("GPA", gpaList);
+        return new Result(Code.SEARCH_SUCCESS, "查询成功", jsonObject);
     }
 }

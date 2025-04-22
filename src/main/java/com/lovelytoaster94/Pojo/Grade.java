@@ -7,6 +7,9 @@ public class Grade {
     String courseNo;
     String courseName;
     int grade;
+    String term;
+    double coursePoint;
+    int courseGrade;
 
     public String getNo() {
         return no;
@@ -54,5 +57,29 @@ public class Grade {
 
     public void setCourseName(String courseName) {
         this.courseName = courseName;
+    }
+
+    public String getTerm() {
+        return term;
+    }
+
+    public void setTerm(String term) {
+        this.term = term;
+    }
+
+    public double getCoursePoint() {
+        return coursePoint;
+    }
+
+    public void setCoursePoint(double coursePoint) {
+        this.coursePoint = coursePoint;
+    }
+
+    public int getCourseGrade() {
+        return courseGrade;
+    }
+
+    public void setCourseGrade(int courseGrade) {
+        this.courseGrade = courseGrade;
     }
 }
