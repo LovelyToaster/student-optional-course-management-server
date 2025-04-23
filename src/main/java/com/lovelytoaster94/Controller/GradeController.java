@@ -77,7 +77,7 @@ public class GradeController {
                 termList.add(item.getTerm());
             }
         }
-        double averageGPA=0;
+        double averageGPA = 0;
         for (String item : termList) {
             double gpa = 0;
             double credit = 0;
@@ -91,11 +91,11 @@ public class GradeController {
             averageGPA += gpa;
             GPA gpaItem = new GPA();
             gpaItem.setTerm(item);
-            gpaItem.setGpa(gpa);
+            gpaItem.setGpa(Double.parseDouble(String.format("%.2f", gpa)));
             gpaList.add(gpaItem);
         }
         averageGPA = averageGPA / termList.size();
-        jsonObject.put("averageGPA", averageGPA);
+        jsonObject.put("averageGPA", Double.parseDouble(String.format("%.2f", averageGPA)));
         jsonObject.put("GPA", gpaList);
         return new Result(Code.SEARCH_SUCCESS, "查询成功", jsonObject);
     }
