@@ -1,5 +1,6 @@
 package com.lovelytoaster94.Controller;
 
+import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.lovelytoaster94.Pojo.GPA;
 import com.lovelytoaster94.Pojo.Grade;
@@ -99,5 +100,44 @@ public class GradeController {
         jsonObject.put("averageGPA", Double.parseDouble(String.format("%.2f", averageGPA)));
         jsonObject.put("GPA", gpaList);
         return new Result(Code.SEARCH_SUCCESS, "查询成功", jsonObject);
+    }
+
+    @RequestMapping(value = "/getGradeStatistics", method = RequestMethod.GET)
+    @ResponseBody
+    public Result getGradeStatistics(@RequestParam("studentNo") String studentNo) {
+        Grade grade = new Grade();
+        grade.setStudentNo(studentNo);
+        List<Grade> data = gradeService.searchGradeInfo(grade);
+        JSONArray jsonArray = new JSONArray();
+        JSONObject gradeStatistics;
+        String[] gradeName = {"90-100", "80-90", "70-80", "60-70", "不及格"};
+        int[] gradeCount = new int[5];
+        for (Grade item : data) {
+            if (item.getGrade() >= 90 && item.getGrade() <= 100) {
+                gradeCount[0]++;
+            }
+            if (item.getGrade() >= 80 && item.getGrade() <= 89) {
+                gradeCount[1]++;
+            }
+            if (item.getGrade() >= 70 && item.getGrade() <= 79) {
+                gradeCount[2]++;
+            }
+            if (item.getGrade() >= 60 && item.getGrade() <= 69) {
+                gradeCount[3]++;
+            }
+            if (item.getGrade() >= 0 && item.getGrade() <= 59) {
+                gradeCount[4]++;
+            }
+        }
+        for (int i = 0; i < gradeName.length; i++) {
+            if (gradeCount[i] == 0)
+                continue;
+            gradeStatistics = new JSONObject();
+            gradeStatistics.put("item", gradeName[i]);
+            gradeStatistics.put("count", gradeCount[i]);
+            gradeStatistics.put("percent", Double.parseDouble(String.format("%.2f", (double) gradeCount[i] / data.size())));
+            jsonArray.add(gradeStatistics);
+        }
+        return new Result(Code.SEARCH_SUCCESS, "查询成功", jsonArray);
     }
 }
