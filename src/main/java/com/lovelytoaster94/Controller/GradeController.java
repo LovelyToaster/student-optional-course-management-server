@@ -92,6 +92,7 @@ public class GradeController {
             GPA gpaItem = new GPA();
             gpaItem.setTerm(item);
             gpaItem.setGpa(Double.parseDouble(String.format("%.2f", gpa)));
+            gpaItem.setCourseGrade((int) credit);
             gpaList.add(gpaItem);
         }
         averageGPA = averageGPA / termList.size();

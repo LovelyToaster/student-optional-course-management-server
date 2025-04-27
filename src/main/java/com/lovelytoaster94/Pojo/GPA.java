@@ -3,6 +3,7 @@ package com.lovelytoaster94.Pojo;
 public class GPA {
     String term;
     double gpa;
+    int courseGrade;
 
     public double getGpa() {
         return gpa;
@@ -18,6 +19,14 @@ public class GPA {
 
     public void setTerm(String term) {
         this.term = term;
+    }
+
+    public int getCourseGrade() {
+        return courseGrade;
+    }
+
+    public void setCourseGrade(int courseGrade) {
+        this.courseGrade = courseGrade;
     }
 }
 
