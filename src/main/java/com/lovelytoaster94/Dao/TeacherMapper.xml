@@ -4,8 +4,17 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lovelytoaster94.Dao.TeacherMapper">
     <select id="allTeacherInfo" resultType="com.lovelytoaster94.Pojo.Teacher">
-        select *
-        from teacher
+        select teacherNo,
+               teacherName,
+               teacherSex,
+               teacherAge,
+               teacherDegree,
+               teacherJob,
+               teacherGraduateInstitutions,
+               teacherFacultiesNo,
+               facultyName
+        from teacher,faculty
+        where teacher.teacherFacultiesNo = faculty.facultyNo
     </select>
 
     <update id="modifyTeacherInfo" parameterType="com.lovelytoaster94.Pojo.Teacher">
@@ -16,7 +25,7 @@
             teacherDegree=#{teacherDegree},
             teacherJob=#{teacherJob},
             teacherGraduateInstitutions=#{teacherGraduateInstitutions},
-            teacherHealth=#{teacherHealth}
+            teacherFacultiesNo=#{teacherFacultiesNo}
         where teacherNo = #{teacherNo}
     </update>
 
@@ -32,42 +41,52 @@
 
     <select id="searchTeacherInfo" parameterType="com.lovelytoaster94.Pojo.Teacher"
             resultType="com.lovelytoaster94.Pojo.Teacher">
-        select *
-        from teacher
-        <where>
-            <if test="teacherNo!=null">
-                and teacherNo=#{teacherNo}
-            </if>
-            <if test="teacherName!=null">
-                and teacherName like "%"#{teacherName}"%"
-            </if>
-            <if test="teacherSex!=null">
-                and teacherSex=#{teacherSex}
-            </if>
-            <if test="teacherAge!=0">
-                and teacherAge=#{teacherAge}
-            </if>
-            <if test="teacherDegree!=null">
-                and teacherDegree=#{teacherDegree}
-            </if>
-            <if test="teacherJob!=null">
-                and teacherJob=#{teacherJob}
-            </if>
-            <if test="teacherGraduateInstitutions!=null">
-                and teacherGraduateInstitutions=#{teacherGraduateInstitutions}
-            </if>
-            <if test="teacherHealth!=null">
-                and teacherHealth=#{teacherHealth}
-            </if>
-        </where>
+        select teacherNo,
+        teacherName,
+        teacherSex,
+        teacherAge,
+        teacherDegree,
+        teacherJob,
+        teacherGraduateInstitutions,
+        teacherFacultiesNo,
+        facultyName
+        from teacher,faculty
+        where teacher.teacherFacultiesNo = faculty.facultyNo
+        <if test="teacherNo!=null">
+            and teacherNo=#{teacherNo}
+        </if>
+        <if test="teacherName!=null">
+            and teacherName like "%"#{teacherName}"%"
+        </if>
+        <if test="teacherSex!=null">
+            and teacherSex=#{teacherSex}
+        </if>
+        <if test="teacherAge!=0">
+            and teacherAge=#{teacherAge}
+        </if>
+        <if test="teacherDegree!=null">
+            and teacherDegree=#{teacherDegree}
+        </if>
+        <if test="teacherJob!=null">
+            and teacherJob=#{teacherJob}
+        </if>
+        <if test="teacherGraduateInstitutions!=null">
+            and teacherGraduateInstitutions=#{teacherGraduateInstitutions}
+        </if>
+        <if test="teacherFacultiesNo!=null">
+            and faculty.facultyNo=#{teacherFacultiesNo}
+        </if>
+        <if test="facultyName!=null">
+            and faculty.facultyName=#{facultyName}
+        </if>
     </select>
     <insert id="addTeacherInfo" parameterType="com.lovelytoaster94.Pojo.Teacher">
         <selectKey keyProperty="teacherNo" resultType="string" order="BEFORE">
             select if(max(teacherNo) is null, 100001, max(teacherNo) + 1) as newId from teacher
         </selectKey>
         insert into teacher
-        (teacherNo,teacherName,teacherSex,teacherAge,teacherDegree,teacherJob,teacherGraduateInstitutions,teacherHealth)
-        value(#{teacherNo},#{teacherName},#{teacherSex},#{teacherAge},#{teacherDegree},#{teacherJob},#{teacherGraduateInstitutions},#{teacherHealth});
+        (teacherNo,teacherName,teacherSex,teacherAge,teacherDegree,teacherJob,teacherGraduateInstitutions,teacherFacultiesNo)
+        value(#{teacherNo},#{teacherName},#{teacherSex},#{teacherAge},#{teacherDegree},#{teacherJob},#{teacherGraduateInstitutions},#{teacherFacultiesNo});
 
         insert into login
         (userName, userPassword, permissions)
