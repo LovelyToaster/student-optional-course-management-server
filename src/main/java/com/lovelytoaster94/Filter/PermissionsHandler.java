@@ -14,7 +14,7 @@ public class PermissionsHandler implements HandlerInterceptor {
 
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         if (!unnecessaryPermissionsPath.contains(request.getServletPath())) {
-            if ((int) request.getAttribute("permissions") != 1) {
+            if ((int) request.getAttribute("permissions") == 2) {
                 String userName = null;
                 if (request.getParameter("studentNo") != null) {
                     userName = request.getParameter("studentNo");
