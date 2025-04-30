@@ -1,15 +1,15 @@
 package com.lovelytoaster94.Pojo;
 
 public class Grade {
-    String no;
-    String studentNo;
-    String studentName;
-    String courseNo;
-    String courseName;
-    int grade;
-    String term;
-    double coursePoint;
-    int courseGrade;
+    private String no;
+    private String studentNo;
+    private String studentName;
+    private String courseNo;
+    private String courseName;
+    private int grade;
+    private String term;
+    private double coursePoint;
+    private int courseGrade;
 
     public String getNo() {
         return no;

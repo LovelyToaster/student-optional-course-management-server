@@ -1,9 +1,9 @@
 package com.lovelytoaster94.Pojo;
 
 public class GPA {
-    String term;
-    double gpa;
-    int courseGrade;
+    private String term;
+    private double gpa;
+    private int courseGrade;
 
     public double getGpa() {
         return gpa;
