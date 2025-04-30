@@ -4,16 +4,30 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lovelytoaster94.Dao.StudentMapper">
     <select id="allStudentInfo" resultType="com.lovelytoaster94.Pojo.Student">
-        select *
-        from student
+        select studentNo,
+               studentName,
+               studentSex,
+               studentAge,
+               studentClassNo,
+               className,
+               majorNo,
+               majorName,
+               facultyNo,
+               facultyName
+        from student,
+             faculty,
+             class,
+             major
+        where student.studentClassNo = class.classNo
+          and class.classMajorNo = major.majorNo
+          and major.majorFacultiesNo = faculty.facultyNo
     </select>
     <update id="modifyStudentInfo" parameterType="com.lovelytoaster94.Pojo.Student">
         update student
         set studentName=#{studentName},
             studentSex=#{studentSex},
             studentAge=#{studentAge},
-            studentFaculties=#{studentFaculties},
-            studentClass=#{studentClass}
+            studentClassNo=#{studentClassNo}
         where studentNo = #{studentNo}
     </update>
     <delete id="deleteStudentInfo" parameterType="string">
@@ -27,35 +41,60 @@
     </delete>
     <select id="searchStudentInfo" parameterType="com.lovelytoaster94.Pojo.Student"
             resultType="com.lovelytoaster94.Pojo.Student">
-        select *
-        from student
-        <where>
-            <if test="studentNo!=null">
-                and studentNo=#{studentNo}
-            </if>
-            <if test="studentName!=null">
-                and studentName like "%"#{studentName}"%"
-            </if>
-            <if test="studentSex!=null">
-                and studentSex=#{studentSex}
-            </if>
-            <if test="studentAge!=0">
-                and studentAge=#{studentAge}
-            </if>
-            <if test="studentFaculties!=null">
-                and studentFaculties=#{studentFaculties}
-            </if>
-            <if test="studentClass!=null">
-                and studentClass=#{studentClass}
-            </if>
-        </where>
+        select studentNo,
+        studentName,
+        studentSex,
+        studentAge,
+        studentClassNo,
+        className,
+        majorNo,
+        majorName,
+        facultyNo,
+        facultyName
+        from student,
+        faculty,
+        class,
+        major
+        where student.studentClassNo = class.classNo
+        and class.classMajorNo = major.majorNo
+        and major.majorFacultiesNo = faculty.facultyNo
+        <if test="studentNo!=null">
+            and studentNo=#{studentNo}
+        </if>
+        <if test="studentName!=null">
+            and studentName like "%"#{studentName}"%"
+        </if>
+        <if test="studentSex!=null">
+            and studentSex=#{studentSex}
+        </if>
+        <if test="studentAge!=0">
+            and studentAge=#{studentAge}
+        </if>
+        <if test="studentClassNo!=null">
+            and class.classNo=#{studentClassNo}
+        </if>
+        <if test="className!=null">
+            and class.className=#{className}
+        </if>
+        <if test="studentClassNo!=null">
+            and class.classNo=#{studentClassNo}
+        </if>
+        <if test="className!=null">
+            and class.className=#{className}
+        </if>
+        <if test="facultyNo!=null">
+            and faculty.facultyNo=#{facultyNo}
+        </if>
+        <if test="facultyName!=null">
+            and faculty.facultyName=#{facultyName}
+        </if>
     </select>
     <insert id="addStudentInfo" parameterType="com.lovelytoaster94.Pojo.Student">
         <selectKey keyProperty="studentNo" resultType="string" order="BEFORE">
             select if(max(studentNo) is null, 100001, max(studentNo) + 1) as newId from student
         </selectKey>
-        insert into student (studentNo,studentName,studentSex,studentAge,studentFaculties,studentClass)
-        value(#{studentNo},#{studentName},#{studentSex},#{studentAge},#{studentFaculties},#{studentClass});
+        insert into student (studentNo,studentName,studentSex,studentAge,studentClassNo)
+        value(#{studentNo},#{studentName},#{studentSex},#{studentAge},#{studentClassNo});
 
         insert into login (userName, userPassword, permissions) value (#{studentNo},"123456",2)
     </insert>
