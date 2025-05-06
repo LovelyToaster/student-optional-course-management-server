@@ -8,7 +8,7 @@
                studentName,
                studentSex,
                studentAge,
-               studentClassNo,
+               studentClassNo AS classNo,
                className,
                majorNo,
                majorName,
@@ -27,7 +27,7 @@
         set studentName=#{studentName},
             studentSex=#{studentSex},
             studentAge=#{studentAge},
-            studentClassNo=#{studentClassNo}
+            studentClassNo=#{classNo}
         where studentNo = #{studentNo}
     </update>
     <delete id="deleteStudentInfo" parameterType="string">
@@ -45,7 +45,7 @@
         studentName,
         studentSex,
         studentAge,
-        studentClassNo,
+        studentClassNo AS classNo,
         className,
         majorNo,
         majorName,
@@ -70,17 +70,17 @@
         <if test="studentAge!=0">
             and studentAge=#{studentAge}
         </if>
-        <if test="studentClassNo!=null">
-            and class.classNo=#{studentClassNo}
+        <if test="classNo!=null">
+            and class.classNo=#{classNo}
         </if>
         <if test="className!=null">
             and class.className=#{className}
         </if>
-        <if test="studentClassNo!=null">
-            and class.classNo=#{studentClassNo}
+        <if test="majorNo!=null">
+            and major.majorNo=#{majorNo}
         </if>
-        <if test="className!=null">
-            and class.className=#{className}
+        <if test="majorName!=null">
+            and major.majorName=#{majorName}
         </if>
         <if test="facultyNo!=null">
             and faculty.facultyNo=#{facultyNo}
@@ -94,7 +94,7 @@
             select if(max(studentNo) is null, 100001, max(studentNo) + 1) as newId from student
         </selectKey>
         insert into student (studentNo,studentName,studentSex,studentAge,studentClassNo)
-        value(#{studentNo},#{studentName},#{studentSex},#{studentAge},#{studentClassNo});
+        value(#{studentNo},#{studentName},#{studentSex},#{studentAge},#{classNo});
 
         insert into login (userName, userPassword, permissions) value (#{studentNo},"123456",2)
     </insert>

@@ -12,7 +12,7 @@ public class Student {
     @JSONField
     private int studentAge;
     @JSONField
-    private String studentClassNo;
+    private String classNo;
     @JSONField
     private String className;
     @JSONField
@@ -56,12 +56,12 @@ public class Student {
         this.studentAge = studentAge;
     }
 
-    public String getStudentClassNo() {
-        return studentClassNo;
+    public String getClassNo() {
+        return classNo;
     }
 
-    public void setStudentClassNo(String studentClassNo) {
-        this.studentClassNo = studentClassNo;
+    public void setClassNo(String classNo) {
+        this.classNo = classNo;
     }
 
     public String getClassName() {
