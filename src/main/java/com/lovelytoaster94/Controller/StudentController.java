@@ -8,11 +8,11 @@ import com.lovelytoaster94.Until.Code;
 import com.lovelytoaster94.Until.Result;
 import com.lovelytoaster94.Until.ManagementResultInfo;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -61,7 +61,7 @@ public class StudentController {
 
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     @ResponseBody
-    public Result searchTeacherInfo(Student student) {
+    public Result searchStudentInfo(Student student) {
         List<Student> data = studentService.searchStudentInfo(student);
         return managementResultInfo.searchInfo(data);
     }
@@ -75,7 +75,11 @@ public class StudentController {
                 return new Result(Code.ADD_FAILED, "添加失败,请输入数据");
             }
         }
-        boolean data = studentService.addStudentInfo(student);
-        return managementResultInfo.addInfo(data);
+        boolean verify = studentService.addStudentInfo(student);
+        Object data = null;
+        if (verify) {
+            data = studentService.searchStudentInfo(student);
+        }
+        return managementResultInfo.addInfo(verify, data);
     }
 }

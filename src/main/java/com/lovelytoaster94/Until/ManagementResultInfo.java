@@ -31,9 +31,9 @@ public class ManagementResultInfo {
         }
     }
 
-    public Result addInfo(Boolean data) {
-        if (data) {
-            return new Result(Code.ADD_SUCCESS, "添加成功");
+    public <T> Result addInfo(Boolean verify, Object data) {
+        if (verify) {
+            return new Result(Code.ADD_SUCCESS, "添加成功", data);
         }
         return new Result(Code.ADD_FAILED, "添加失败，请检查数据");
     }
