@@ -82,4 +82,20 @@ public class StudentController {
         }
         return managementResultInfo.addInfo(verify, data);
     }
+
+    @RequestMapping(value = "/batchAdd", method = RequestMethod.POST)
+    @ResponseBody
+    public Result batchAddStudentInfo(@RequestBody List<Student> studentList) {
+        List<Object> data = new ArrayList<>();
+        for (Student student : studentList) {
+            boolean verify = studentService.addStudentInfo(student);
+            if (verify) {
+                data.add(studentService.searchStudentInfo(student));
+            }
+        }
+        if (data.size() == studentList.size()) {
+            return new Result(Code.ADD_FAILED, "添加成功，共成功添加" + data.size() + "条数据", data);
+        }
+        return new Result(Code.ADD_FAILED, "添加失败，共成功添加" + data.size() + "条数据", data);
+    }
 }
