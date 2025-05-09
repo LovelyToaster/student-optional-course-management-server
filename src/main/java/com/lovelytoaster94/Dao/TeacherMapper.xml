@@ -11,7 +11,7 @@
                teacherDegree,
                teacherJob,
                teacherGraduateInstitutions,
-               teacherFacultiesNo,
+               teacherFacultiesNo as facultyNo,
                facultyName
         from teacher,faculty
         where teacher.teacherFacultiesNo = faculty.facultyNo
@@ -25,7 +25,7 @@
             teacherDegree=#{teacherDegree},
             teacherJob=#{teacherJob},
             teacherGraduateInstitutions=#{teacherGraduateInstitutions},
-            teacherFacultiesNo=#{teacherFacultiesNo}
+            teacherFacultiesNo=#{facultyNo}
         where teacherNo = #{teacherNo}
     </update>
 
@@ -48,7 +48,7 @@
         teacherDegree,
         teacherJob,
         teacherGraduateInstitutions,
-        teacherFacultiesNo,
+        teacherFacultiesNo as facultyNo,
         facultyName
         from teacher,faculty
         where teacher.teacherFacultiesNo = faculty.facultyNo
@@ -73,8 +73,8 @@
         <if test="teacherGraduateInstitutions!=null">
             and teacherGraduateInstitutions=#{teacherGraduateInstitutions}
         </if>
-        <if test="teacherFacultiesNo!=null">
-            and faculty.facultyNo=#{teacherFacultiesNo}
+        <if test="facultyNo!=null">
+            and faculty.facultyNo=#{facultyNo}
         </if>
         <if test="facultyName!=null">
             and faculty.facultyName=#{facultyName}
@@ -86,7 +86,7 @@
         </selectKey>
         insert into teacher
         (teacherNo,teacherName,teacherSex,teacherAge,teacherDegree,teacherJob,teacherGraduateInstitutions,teacherFacultiesNo)
-        value(#{teacherNo},#{teacherName},#{teacherSex},#{teacherAge},#{teacherDegree},#{teacherJob},#{teacherGraduateInstitutions},#{teacherFacultiesNo});
+        value(#{teacherNo},#{teacherName},#{teacherSex},#{teacherAge},#{teacherDegree},#{teacherJob},#{teacherGraduateInstitutions},#{facultyNo});
 
         insert into login
         (userName, userPassword, permissions)

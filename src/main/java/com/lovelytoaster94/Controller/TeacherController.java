@@ -74,7 +74,11 @@ public class TeacherController {
                 return new Result(Code.ADD_FAILED, "添加失败,请输入数据");
             }
         }
-        boolean data = teacherService.addTeacherInfo(teacher);
-        return managementResultInfo.addInfo(data);
+        boolean verify = teacherService.addTeacherInfo(teacher);
+        Object data = null;
+        if (verify) {
+            data = teacherService.searchTeacherInfo(teacher);
+        }
+        return managementResultInfo.addInfo(verify, data);
     }
 }

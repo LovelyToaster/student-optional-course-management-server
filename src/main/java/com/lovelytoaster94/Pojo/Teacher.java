@@ -18,7 +18,7 @@ public class Teacher {
     @JSONField
     private String teacherGraduateInstitutions;
     @JSONField
-    private String teacherFacultiesNo;
+    private String facultyNo;
     @JSONField
     private String facultyName;
 
@@ -78,6 +78,14 @@ public class Teacher {
         this.teacherGraduateInstitutions = teacherGraduateInstitutions;
     }
 
+    public String getFacultyNo() {
+        return facultyNo;
+    }
+
+    public void setFacultyNo(String facultyNo) {
+        this.facultyNo = facultyNo;
+    }
+
     public String getFacultyName() {
         return facultyName;
     }
@@ -86,11 +94,4 @@ public class Teacher {
         this.facultyName = facultyName;
     }
 
-    public String getTeacherFacultiesNo() {
-        return teacherFacultiesNo;
-    }
-
-    public void setTeacherFacultiesNo(String teacherFacultiesNo) {
-        this.teacherFacultiesNo = teacherFacultiesNo;
-    }
 }
