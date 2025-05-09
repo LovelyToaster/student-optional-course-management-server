@@ -60,8 +60,8 @@ public class GradeController {
         if (grade.getStudentNo() == null && grade.getCourseNo() == null) {
             return new Result(Code.ADD_FAILED, "添加失败,请输入数据");
         }
-        boolean data = gradeService.addGradeInfo(grade);
-        return managementResultInfo.addInfo(data);
+        boolean verify = gradeService.addGradeInfo(grade);
+        return managementResultInfo.addInfo(verify, grade);
     }
 
     @RequestMapping(value = "/getGPA", method = RequestMethod.GET)

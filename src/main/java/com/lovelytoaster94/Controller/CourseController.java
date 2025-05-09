@@ -69,7 +69,7 @@ public class CourseController {
                 return new Result(Code.ADD_FAILED, "添加失败,请输入数据");
             }
         }
-        boolean data = courseService.addCourseInfo(course);
-        return managementResultInfo.addInfo(data);
+        boolean verify = courseService.addCourseInfo(course);
+        return managementResultInfo.addInfo(verify, course);
     }
 }
