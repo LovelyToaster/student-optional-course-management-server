@@ -98,4 +98,20 @@ public class StudentController {
         }
         return new Result(Code.ADD_FAILED, "添加失败，共成功添加" + data.size() + "条数据", data);
     }
+
+    @RequestMapping(value = "/batchDel", method = RequestMethod.POST)
+    @ResponseBody
+    public Result batchDelStudentInfo(@RequestBody List<Student> studentList) {
+        List<Object> data = new ArrayList<>();
+        for (Student student : studentList) {
+            boolean verify = studentService.deleteStudentInfo(student.getStudentNo());
+            if (verify) {
+                data.add(student.getStudentNo());
+            }
+        }
+        if (data.size() == studentList.size()) {
+            return new Result(Code.DELETE_SUCCESS, "删除成功，共成功删除" + data.size() + "条数据", data);
+        }
+        return new Result(Code.DELETE_FAILED, "删除失败，共成功删除" + data.size() + "条数据", data);
+    }
 }
