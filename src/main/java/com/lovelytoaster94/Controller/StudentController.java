@@ -4,6 +4,7 @@ import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.lovelytoaster94.Pojo.Student;
 import com.lovelytoaster94.Service.StudentService;
+import com.lovelytoaster94.Until.AddVerify;
 import com.lovelytoaster94.Until.Code;
 import com.lovelytoaster94.Until.Result;
 import com.lovelytoaster94.Until.ManagementResultInfo;
@@ -69,11 +70,9 @@ public class StudentController {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @ResponseBody
     public Result addStudentInfo(Student student) {
-        JSONObject jsonObject = JSONObject.parseObject(JSONObject.toJSONString(student));
-        for (Map.Entry<String, Object> entry : jsonObject.entrySet()) {
-            if (entry.getValue() == null || entry.getValue().equals(0)) {
-                return new Result(Code.ADD_FAILED, "添加失败,请输入数据");
-            }
+        AddVerify addVerify = new AddVerify();
+        if (!addVerify.verify(student)) {
+            return new Result(Code.ADD_FAILED, "添加失败，请检查数据是否填写正确");
         }
         boolean verify = studentService.addStudentInfo(student);
         Object data = null;

@@ -3,6 +3,7 @@ package com.lovelytoaster94.Controller;
 import com.alibaba.fastjson2.JSONObject;
 import com.lovelytoaster94.Pojo.Course;
 import com.lovelytoaster94.Service.CourseService;
+import com.lovelytoaster94.Until.AddVerify;
 import com.lovelytoaster94.Until.Code;
 import com.lovelytoaster94.Until.Result;
 import com.lovelytoaster94.Until.ManagementResultInfo;
@@ -63,11 +64,9 @@ public class CourseController {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @ResponseBody
     public Result addCourseInfo(Course course) {
-        JSONObject jsonObject = JSONObject.parseObject(JSONObject.toJSONString(course));
-        for (Map.Entry<String, Object> entry : jsonObject.entrySet()) {
-            if (entry.getValue() == null || entry.getValue().equals(0)) {
-                return new Result(Code.ADD_FAILED, "添加失败,请输入数据");
-            }
+        AddVerify  addVerify = new AddVerify();
+        if (!addVerify.verify(course)) {
+            return new Result(Code.ADD_FAILED, "添加失败，请检查数据是否填写正确");
         }
         boolean verify = courseService.addCourseInfo(course);
         return managementResultInfo.addInfo(verify, course);

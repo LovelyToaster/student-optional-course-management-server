@@ -5,6 +5,7 @@ import com.alibaba.fastjson2.JSONObject;
 import com.lovelytoaster94.Pojo.GPA;
 import com.lovelytoaster94.Pojo.Grade;
 import com.lovelytoaster94.Service.GradeService;
+import com.lovelytoaster94.Until.AddVerify;
 import com.lovelytoaster94.Until.Code;
 import com.lovelytoaster94.Until.Result;
 import com.lovelytoaster94.Until.ManagementResultInfo;
@@ -57,8 +58,9 @@ public class GradeController {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @ResponseBody
     public Result addGradeInfo(Grade grade) {
-        if (grade.getStudentNo() == null && grade.getCourseNo() == null) {
-            return new Result(Code.ADD_FAILED, "添加失败,请输入数据");
+        AddVerify addVerify = new AddVerify();
+        if (!addVerify.verify(grade)) {
+            return new Result(Code.ADD_FAILED, "添加失败，请检查数据是否填写正确");
         }
         boolean verify = gradeService.addGradeInfo(grade);
         return managementResultInfo.addInfo(verify, grade);
