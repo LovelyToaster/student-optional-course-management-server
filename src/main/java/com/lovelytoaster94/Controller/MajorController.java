@@ -75,7 +75,7 @@ public class MajorController {
             }
         }
         if (data.size() == majorList.size()) {
-            return new Result(Code.ADD_FAILED, "添加成功，共成功添加" + data.size() + "条数据", data);
+            return new Result(Code.ADD_SUCCESS, "添加成功，共成功添加" + data.size() + "条数据", data);
         }
         return new Result(Code.ADD_FAILED, "添加失败，共成功添加" + data.size() + "条数据", data);
     }
