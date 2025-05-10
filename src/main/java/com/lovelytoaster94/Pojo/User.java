@@ -3,7 +3,7 @@ package com.lovelytoaster94.Pojo;
 public class User {
     private String userName;
     private String userPassword;
-    private int permissions;
+    private Integer permissions;
     private String avatarName;
 
     public String getUserName() {
@@ -31,7 +31,7 @@ public class User {
         this.avatarName = avatarName;
     }
 
-    public int getPermissions() {
+    public Integer getPermissions() {
         return permissions;
     }
 

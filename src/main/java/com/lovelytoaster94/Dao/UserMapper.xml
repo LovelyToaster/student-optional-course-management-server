@@ -35,7 +35,7 @@
             <if test="userName!=null">
                 and userName like "%"#{userName}"%"
             </if>
-            <if test="permissions!=0">
+            <if test="permissions!=null">
                 and permissions=#{permissions}
             </if>
         </where>
