@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lovelytoaster94.Dao.ClassMapper">
+    <select id="allClassInfo" resultType="com.lovelytoaster94.Pojo.Class">
+        select classNo,
+               className,
+               classMajorNo AS majorNo,
+               majorName,
+               facultyNo,
+               facultyName
+        from class,
+             major,
+             faculty
+        where class.classMajorNo = major.majorNo
+          and major.majorFacultiesNo = faculty.facultyNo
+    </select>
+    <update id="modifyClassInfo" parameterType="com.lovelytoaster94.Pojo.Class">
+        update class
+        set className=#{className},
+            classMajorNo=#{majorNo}
+        where classNo = #{classNo}
+    </update>
+    <delete id="deleteClassInfo" parameterType="string">
+        delete
+        from class
+        where classNo = #{classNo};
+    </delete>
+    <select id="searchClassInfo" parameterType="com.lovelytoaster94.Pojo.Class"
+            resultType="com.lovelytoaster94.Pojo.Class">
+        select classNo,
+        className,
+        classMajorNo AS majorNo,
+        majorName,
+        facultyNo,
+        facultyName
+        from class,
+        major,
+        faculty
+        where class.classMajorNo = major.majorNo
+          and major.majorFacultiesNo = faculty.facultyNo
+        <if test="classNo!=null">
+            and classNo = #{classNo}
+        </if>
+        <if test="className!=null">
+            and className like "%"#{className}"%"
+        </if>
+        <if test="majorNo!=null">
+            and classMajorNo = #{majorNo}
+        </if>
+        <if test="majorName!=null">
+            and majorName like "%"#{majorName}"%"
+        </if>
+    </select>
+    <insert id="addClassInfo" parameterType="com.lovelytoaster94.Pojo.Class">
+        <selectKey keyProperty="classNo" resultType="string" order="BEFORE">
+            select if(max(classNo) is null, 1, max(classNo) + 1) as newId from class
+        </selectKey>
+        insert into class
+        (classNo, className, classMajorNo)
+        value(#{classNo},#{className},#{majorNo});
+    </insert>
+</mapper>
