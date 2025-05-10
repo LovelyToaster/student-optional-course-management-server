@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lovelytoaster94.Dao.CourseMapper">
     <select id="allCourseInfo" resultType="com.lovelytoaster94.Pojo.Course">
-        select courseNo, courseName, teacher.teacherNo, teacher.teacherName
+        select courseNo, courseName, teacher.teacherNo, teacher.teacherName, courseGrade, courseTime
         from course,
              teacher
         where course.teacherNo = teacher.teacherNo
@@ -12,7 +12,9 @@
     <update id="modifyCourseInfo" parameterType="com.lovelytoaster94.Pojo.Course">
         update course
         set courseName=#{courseName},
-            teacherNo=#{teacherNo}
+            teacherNo=#{teacherNo},
+            courseGrade=#{courseGrade},
+            courseTime=#{courseTime}
         where courseNo = #{courseNo}
     </update>
     <delete id="deleteCourseInfo" parameterType="string">
@@ -22,7 +24,7 @@
     </delete>
     <select id="searchCourseInfo" parameterType="com.lovelytoaster94.Pojo.Course"
             resultType="com.lovelytoaster94.Pojo.Course">
-        select courseNo, courseName, teacher.teacherNo, teacher.teacherName
+        select courseNo, courseName, teacher.teacherNo, teacher.teacherName, courseGrade, courseTime
         from course,
              teacher
         where course.teacherNo = teacher.teacherNo
@@ -38,13 +40,19 @@
         <if test="teacherName!=null">
             and teacher.teacherName like "%"#{teacherName}"%"
         </if>
+        <if test="courseGrade!=null">
+            and courseGrade= #{courseGrade}
+        </if>
+        <if test="courseTime!=null">
+            and courseTime like "%"#{courseTime}"%"
+        </if>
     </select>
     <insert id="addCourseInfo" parameterType="com.lovelytoaster94.Pojo.Course">
         <selectKey keyProperty="courseNo" resultType="string" order="BEFORE">
             select if(max(courseNo) is null, 100001, max(courseNo) + 1) as newId from course
         </selectKey>
         insert into course
-        (courseNo,courseName,teacherNo)
-        value(#{courseNo},#{courseName},#{teacherNo})
+        (courseNo,courseName,teacherNo,courseGrade,courseTime)
+        value(#{courseNo},#{courseName},#{teacherNo},#{courseGrade},#{courseTime})
     </insert>
 </mapper>
