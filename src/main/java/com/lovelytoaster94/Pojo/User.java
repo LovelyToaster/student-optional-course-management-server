@@ -5,6 +5,7 @@ public class User {
     private String userPassword;
     private Integer permissions;
     private String avatarName;
+    private String email;
 
     public String getUserName() {
         return userName;
@@ -37,5 +38,13 @@ public class User {
 
     public void setPermissions(int permissions) {
         this.permissions = permissions;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

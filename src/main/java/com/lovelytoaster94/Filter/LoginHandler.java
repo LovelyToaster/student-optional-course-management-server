@@ -8,9 +8,17 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class LoginHandler implements HandlerInterceptor {
+    private static final List<String> unnecessaryLoginPath = Arrays.asList("/user/emailSend","/user/forgetPassword");
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        if (unnecessaryLoginPath.contains(request.getServletPath())){
+            return HandlerInterceptor.super.preHandle(request, response, handler);
+        }
         JwtUntil jwtUntil = new JwtUntil();
         Result result = jwtUntil.loginStatus(request, response);
         JSONObject jsonObject;

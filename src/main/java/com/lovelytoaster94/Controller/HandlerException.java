@@ -2,6 +2,7 @@ package com.lovelytoaster94.Controller;
 
 import com.lovelytoaster94.Until.Code;
 import com.lovelytoaster94.Until.Result;
+import jakarta.mail.MessagingException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,9 +24,22 @@ public class HandlerException {
         return new ResponseEntity<>(result, HttpStatus.CONFLICT);
     }
 
+    @ExceptionHandler(MessagingException.class)
+    @ResponseBody
+    public ResponseEntity<Result> handleMessagingException(MessagingException e) {
+        Result result = new Result(
+                Code.SERVICE_FAILED,
+                "邮件发送失败，可能存在错误。",
+                e.getMessage()
+        );
+        return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
     @ExceptionHandler({Exception.class})
     @ResponseBody
     public ResponseEntity<Result> handleException(Exception e) {
+        e.printStackTrace();
+
         Result result = new Result(Code.SERVICE_FAILED, "发生错误，请联系管理员", e.toString());
 
         return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);

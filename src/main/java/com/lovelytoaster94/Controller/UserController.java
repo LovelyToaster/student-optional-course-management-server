@@ -4,12 +4,11 @@ import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.lovelytoaster94.Pojo.User;
 import com.lovelytoaster94.Service.UserService;
-import com.lovelytoaster94.Until.Code;
-import com.lovelytoaster94.Until.JwtUntil;
-import com.lovelytoaster94.Until.ManagementResultInfo;
-import com.lovelytoaster94.Until.Result;
+import com.lovelytoaster94.Until.*;
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 @Controller
@@ -164,6 +164,7 @@ public class UserController {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("userName", u.getUserName());
             jsonObject.put("permissions", u.getPermissions());
+            jsonObject.put("email", u.getEmail());
             if (u.getAvatarName() != null)
                 jsonObject.put("avatarPath", GET_AVATAR_PATH + u.getAvatarName() + ".jpg");
             else
@@ -171,6 +172,71 @@ public class UserController {
             jsonArray.add(jsonObject);
         }
         return jsonArray;
+    }
+
+    @RequestMapping(value = "/emailSend", method = RequestMethod.POST)
+    @ResponseBody
+    public Result sendCode(@RequestParam("email") String email, HttpSession session) throws MessagingException {
+        Long codeTime = (Long) session.getAttribute("codeTime");
+
+        if (codeTime != null && System.currentTimeMillis() - codeTime < 5 * 60 * 1000) {
+            return new Result(Code.EMAIL_SEND_TOO_FREQUENT, "5分钟内请勿重复获取验证码");
+        }
+
+        String code = String.valueOf(new Random().nextInt(899999) + 100000);
+        session.setAttribute("emailCode", code);
+        session.setAttribute("codeTime", System.currentTimeMillis());
+        session.setAttribute("emailTarget", email);
+        MailUntil.sendMail(email, code);
+        return new Result(Code.EMAIL_SEND_SUCCESS, "验证码发送成功！");
+    }
+
+    @RequestMapping(value = "/forgetPassword", method = RequestMethod.POST)
+    @ResponseBody
+    public Result forgetPassword(@RequestParam("email") String email, @RequestParam("code") String code, @RequestParam("newPassword") String newPassword, HttpSession session) {
+        Result verificationResult = verifyCode(email, code, session);
+        if (verificationResult.getCode() != Code.CODE_VERIFY_SUCCESS) {
+            return verificationResult;
+        }
+
+        User userSearch = new User();
+        userSearch.setEmail(email);
+        User user = userService.searchUserInfo(userSearch).getFirst();
+        if (user == null) {
+            return new Result(Code.CODE_VERIFY_FAILED, "邮箱未注册");
+        }
+
+        userService.setPassword(user.getUserName(), newPassword);
+
+        session.removeAttribute("emailCode");
+        session.removeAttribute("codeTime");
+        session.removeAttribute("emailTarget");
+
+        return new Result(Code.CODE_VERIFY_SUCCESS, "密码已重置");
+    }
+
+    private Result verifyCode(String email, String code, HttpSession session) {
+        String sessionCode = (String) session.getAttribute("emailCode");
+        Long codeTime = (Long) session.getAttribute("codeTime");
+        String emailTarget = (String) session.getAttribute("emailTarget");
+
+        if (sessionCode == null || codeTime == null || emailTarget == null) {
+            return new Result(Code.CODE_VERIFY_FAILED, "验证码不存在或已过期");
+        }
+
+        if (!email.equals(emailTarget)) {
+            return new Result(Code.CODE_VERIFY_FAILED, "邮箱不匹配，请使用接收验证码的邮箱");
+        }
+
+        if (System.currentTimeMillis() - codeTime > 5 * 60 * 1000) {
+            return new Result(Code.CODE_VERIFY_FAILED, "验证码已过期");
+        }
+
+        if (!sessionCode.equals(code)) {
+            return new Result(Code.CODE_VERIFY_FAILED, "验证码错误");
+        }
+
+        return new Result(Code.CODE_VERIFY_SUCCESS, "验证码验证成功");
     }
 
 }
