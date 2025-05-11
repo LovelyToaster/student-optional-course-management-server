@@ -2,28 +2,26 @@ package com.lovelytoaster94.Controller;
 
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
-import com.lovelytoaster94.Pojo.Student;
 import com.lovelytoaster94.Pojo.Teacher;
 import com.lovelytoaster94.Service.TeacherService;
-import com.lovelytoaster94.Until.AddVerify;
-import com.lovelytoaster94.Until.Code;
-import com.lovelytoaster94.Until.ManagementResultInfo;
-import com.lovelytoaster94.Until.Result;
+import com.lovelytoaster94.Service.UserService;
+import com.lovelytoaster94.Until.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequestMapping(value = "/teacher", method = RequestMethod.GET)
 public class TeacherController {
     private final TeacherService teacherService;
+    private final UserService userService;
     private final ManagementResultInfo managementResultInfo = new ManagementResultInfo();
 
-    public TeacherController(TeacherService teacherService) {
+    public TeacherController(TeacherService teacherService, UserService userService) {
         this.teacherService = teacherService;
+        this.userService = userService;
     }
 
     @RequestMapping(value = "/all", method = RequestMethod.GET)
@@ -47,6 +45,16 @@ public class TeacherController {
     @RequestMapping(value = "/modify", method = RequestMethod.POST)
     @ResponseBody
     public Result modifyTeacherInfo(Teacher teacher) {
+        String email = teacher.getEmail();
+        if (email != null) {
+            if (!MailUntil.isValidEmail(email)) {
+                MailUntil.setUserService(userService);
+                return new Result(Code.MODIFY_FAILED, "邮箱格式不正确");
+            }
+            if (MailUntil.checkEmailRepeat(email, teacher.getTeacherNo()) != null) {
+                return new Result(Code.EMAIL_REPEAT, "邮箱已被注册");
+            }
+        }
         boolean data = teacherService.modifyTeacherInfo(teacher);
         return managementResultInfo.modifyInfo(data);
     }

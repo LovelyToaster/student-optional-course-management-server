@@ -4,28 +4,25 @@ import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.lovelytoaster94.Pojo.Student;
 import com.lovelytoaster94.Service.StudentService;
-import com.lovelytoaster94.Until.AddVerify;
-import com.lovelytoaster94.Until.Code;
-import com.lovelytoaster94.Until.Result;
-import com.lovelytoaster94.Until.ManagementResultInfo;
+import com.lovelytoaster94.Service.UserService;
+import com.lovelytoaster94.Until.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequestMapping(value = "/student")
 public class StudentController {
 
     private final StudentService studentService;
+    private final UserService userService;
     private final ManagementResultInfo managementResultInfo = new ManagementResultInfo();
 
-    public StudentController(StudentService studentService) {
+    public StudentController(StudentService studentService, UserService userService) {
         this.studentService = studentService;
+        this.userService = userService;
     }
 
     @RequestMapping(value = "/all", method = RequestMethod.GET)
@@ -49,6 +46,16 @@ public class StudentController {
     @RequestMapping(value = "/modify", method = RequestMethod.POST)
     @ResponseBody
     public Result modifyStudentInfo(Student student) {
+        String email = student.getEmail();
+        if (email != null) {
+            MailUntil.setUserService(userService);
+            if (!MailUntil.isValidEmail(email)) {
+                return new Result(Code.MODIFY_FAILED, "邮箱格式不正确");
+            }
+            if (MailUntil.checkEmailRepeat(email, student.getStudentNo()) != null) {
+                return new Result(Code.EMAIL_REPEAT, "邮箱已被注册");
+            }
+        }
         boolean data = studentService.modifyStudentInfo(student);
         return managementResultInfo.modifyInfo(data);
     }

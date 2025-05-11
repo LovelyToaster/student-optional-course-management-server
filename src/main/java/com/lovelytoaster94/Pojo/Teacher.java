@@ -21,6 +21,8 @@ public class Teacher {
     private String facultyNo;
     @JSONField
     private String facultyName;
+    @JSONField
+    private String email;
 
     public String getTeacherNo() {
         return teacherNo;
@@ -94,4 +96,11 @@ public class Teacher {
         this.facultyName = facultyName;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 }

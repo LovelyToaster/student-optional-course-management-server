@@ -211,7 +211,7 @@ public class UserController {
         return new Result(Code.CODE_VERIFY_SUCCESS, "密码已重置");
     }
 
-    @RequestMapping(value = "/setEmail",method = RequestMethod.POST)
+    @RequestMapping(value = "/setEmail", method = RequestMethod.POST)
     @ResponseBody
     public Result setEmail(@RequestParam("email") String email, @RequestParam("code") String code, @RequestParam("newEmail") String newEmail, HttpSession session) {
         Result verificationResult = verifyCode(email, code, session);
@@ -233,6 +233,17 @@ public class UserController {
 
         return new Result(Code.CODE_VERIFY_SUCCESS, "邮箱已更新");
     }
+
+    @RequestMapping(value = "/initEmail", method = RequestMethod.POST)
+    @ResponseBody
+    public Result initEmail(@RequestParam("userName") String userName, @RequestParam("email") String email) {
+        if (MailUntil.checkEmailRepeat(email, userName) == null) {
+            userService.setEmail(userName, email);
+            return new Result(Code.EMAIL_SET_SUCCESS, "初始邮箱设置完成");
+        }
+        return new Result(Code.EMAIL_REPEAT, "邮箱已被注册");
+    }
+
 
     private Result verifyCode(String email, String code, HttpSession session) {
         String sessionCode = (String) session.getAttribute("emailCode");

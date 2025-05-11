@@ -13,6 +13,7 @@ public class Code {
     public final static int CODE_VERIFY_FAILED = 5008;
     public final static int TOKEN_EXPIRED = 5009;
     public final static int NO_LOGIN = 5010;
+    public final static int EMAIL_REPEAT = 5011;
 
     public final static int LOGIN_SUCCESS = 2001;
     public final static int SEARCH_SUCCESS = 2002;
@@ -22,4 +23,5 @@ public class Code {
     public final static int LOGIN_OUT_SUCCESS = 2006;
     public final static int EMAIL_SEND_SUCCESS = 2007;
     public final static int CODE_VERIFY_SUCCESS = 2008;
+    public final static int EMAIL_SET_SUCCESS = 2009;
 }

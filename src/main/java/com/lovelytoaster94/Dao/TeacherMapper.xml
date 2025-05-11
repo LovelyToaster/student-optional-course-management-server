@@ -12,9 +12,13 @@
                teacherJob,
                teacherGraduateInstitutions,
                teacherFacultiesNo as facultyNo,
-               facultyName
-        from teacher,faculty
+               facultyName,
+               email
+        from teacher,
+             faculty,
+             login
         where teacher.teacherFacultiesNo = faculty.facultyNo
+          and login.userName = teacher.teacherNo
     </select>
 
     <update id="modifyTeacherInfo" parameterType="com.lovelytoaster94.Pojo.Teacher">
@@ -26,7 +30,11 @@
             teacherJob=#{teacherJob},
             teacherGraduateInstitutions=#{teacherGraduateInstitutions},
             teacherFacultiesNo=#{facultyNo}
-        where teacherNo = #{teacherNo}
+        where teacherNo = #{teacherNo};
+
+        update login
+        set email=#{email}
+        where userName = #{teacherNo}
     </update>
 
     <delete id="deleteTeacherInfo" parameterType="string">
@@ -49,9 +57,11 @@
         teacherJob,
         teacherGraduateInstitutions,
         teacherFacultiesNo as facultyNo,
-        facultyName
-        from teacher,faculty
+        facultyName,
+        email
+        from teacher,faculty,login
         where teacher.teacherFacultiesNo = faculty.facultyNo
+        and login.userName = teacher.teacherNo
         <if test="teacherNo!=null">
             and teacherNo=#{teacherNo}
         </if>
@@ -78,6 +88,9 @@
         </if>
         <if test="facultyName!=null">
             and faculty.facultyName=#{facultyName}
+        </if>
+        <if test="email!=null">
+            and login.email=#{email}
         </if>
     </select>
     <insert id="addTeacherInfo" parameterType="com.lovelytoaster94.Pojo.Teacher">

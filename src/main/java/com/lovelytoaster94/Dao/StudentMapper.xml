@@ -13,14 +13,17 @@
                majorNo,
                majorName,
                facultyNo,
-               facultyName
+               facultyName,
+               email
         from student,
              faculty,
              class,
-             major
+             major,
+             login
         where student.studentClassNo = class.classNo
           and class.classMajorNo = major.majorNo
           and major.majorFacultiesNo = faculty.facultyNo
+          and student.studentNo = login.userName
     </select>
     <update id="modifyStudentInfo" parameterType="com.lovelytoaster94.Pojo.Student">
         update student
@@ -28,7 +31,11 @@
             studentSex=#{studentSex},
             studentAge=#{studentAge},
             studentClassNo=#{classNo}
-        where studentNo = #{studentNo}
+        where studentNo = #{studentNo};
+
+        update login
+        set email=#{email}
+        where userName = #{studentNo}
     </update>
     <delete id="deleteStudentInfo" parameterType="string">
         delete
@@ -50,14 +57,17 @@
         majorNo,
         majorName,
         facultyNo,
-        facultyName
+        facultyName,
+        email
         from student,
         faculty,
         class,
-        major
+        major,
+        login
         where student.studentClassNo = class.classNo
         and class.classMajorNo = major.majorNo
         and major.majorFacultiesNo = faculty.facultyNo
+        and student.studentNo = login.userName
         <if test="studentNo!=null">
             and studentNo=#{studentNo}
         </if>
@@ -87,6 +97,9 @@
         </if>
         <if test="facultyName!=null">
             and faculty.facultyName=#{facultyName}
+        </if>
+        <if test="email!=null">
+            and login.email=#{email}
         </if>
     </select>
     <insert id="addStudentInfo" parameterType="com.lovelytoaster94.Pojo.Student">
