@@ -17,4 +17,6 @@ public interface UserMapper {
     List<User> searchUserInfo(User user);
 
     boolean resetPassword(@Param("userName") String userName);
+
+    boolean setEmail(@Param("userName") String userName, @Param("email") String email);
 }

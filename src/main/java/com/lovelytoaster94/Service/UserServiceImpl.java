@@ -38,4 +38,8 @@ public class UserServiceImpl implements UserService {
     public boolean resetPassword(String userName) {
         return userMapper.resetPassword(userName);
     }
+
+    public boolean setEmail(String userName, String email) {
+        return userMapper.setEmail(userName, email);
+    }
 }

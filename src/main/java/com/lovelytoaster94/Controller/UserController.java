@@ -211,6 +211,29 @@ public class UserController {
         return new Result(Code.CODE_VERIFY_SUCCESS, "密码已重置");
     }
 
+    @RequestMapping(value = "/setEmail",method = RequestMethod.POST)
+    @ResponseBody
+    public Result setEmail(@RequestParam("email") String email, @RequestParam("code") String code, @RequestParam("newEmail") String newEmail, HttpSession session) {
+        Result verificationResult = verifyCode(email, code, session);
+        if (verificationResult.getCode() != Code.CODE_VERIFY_SUCCESS) {
+            return verificationResult;
+        }
+
+        User userSearch = new User();
+        userSearch.setEmail(email);
+        User user = userService.searchUserInfo(userSearch).getFirst();
+        if (user == null) {
+            return new Result(Code.CODE_VERIFY_FAILED, "邮箱未注册");
+        }
+        userService.setEmail(user.getUserName(), newEmail);
+
+        session.removeAttribute("emailCode");
+        session.removeAttribute("codeTime");
+        session.removeAttribute("emailTarget");
+
+        return new Result(Code.CODE_VERIFY_SUCCESS, "邮箱已更新");
+    }
+
     private Result verifyCode(String email, String code, HttpSession session) {
         String sessionCode = (String) session.getAttribute("emailCode");
         Long codeTime = (Long) session.getAttribute("codeTime");

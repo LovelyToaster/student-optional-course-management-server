@@ -16,4 +16,6 @@ public interface UserService {
     List<User> searchUserInfo(User user);
 
     boolean resetPassword(String userName);
+
+    boolean setEmail(String userNamee, String email);
 }

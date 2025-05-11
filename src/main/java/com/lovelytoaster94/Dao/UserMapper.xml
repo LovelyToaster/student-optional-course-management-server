@@ -22,6 +22,12 @@
         where userName = #{userName}
     </update>
 
+    <update id="setEmail" parameterType="string">
+        update login
+        set email = #{email}
+        where userName = #{userName}
+    </update>
+
     <select id="allUserInfo" resultType="com.lovelytoaster94.Pojo.User">
         SELECT *
         FROM login
