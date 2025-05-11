@@ -78,7 +78,7 @@ public class UserController {
             boolean isSetSuccess = userService.setPassword(userName, newPassword);
             if (isSetSuccess) {
                 response.addHeader("Set-Cookie", "token=" + ";Max-Age=0;Path=/;HttpOnly");
-                return new Result(Code.MODIFY_SUCCESS, "密码修改成功！");
+                return new Result(Code.MODIFY_SUCCESS, "密码修改成功！稍后将返回登录界面");
             }
         }
         return new Result(Code.MODIFY_FAILED, "密码修改失败，请检查当前密码是否正确");
