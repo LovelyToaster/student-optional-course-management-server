@@ -29,7 +29,7 @@ public class LoginHandler implements HandlerInterceptor {
             return HandlerInterceptor.super.preHandle(request, response, handler);
         }
         jsonObject = new JSONObject();
-        jsonObject.put("code", Code.LOGIN_FAILED);
+        jsonObject.put("code", result.getCode());
         jsonObject.put("message", result.getMessage());
         jsonObject.put("data", result.getData());
         response.setContentType("application/json;charset=utf-8");

@@ -10,7 +10,6 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -57,11 +56,11 @@ public class JwtUntil {
                     if (data != null) {
                         return new Result(Code.LOGIN_SUCCESS, "登陆成功", data);
                     }
-                    response.addHeader("Cache-Control", "no-cache");
-                    return new Result(Code.LOGIN_FAILED, "登录验证失败，可能token已经失效");
+                    response.addHeader("Set-Cookie", "token=; Path=/; Max-Age=0; HttpOnly");
+                    return new Result(Code.TOKEN_EXPIRED, "登录验证失败，可能token已经失效，稍后将返回主界面");
                 }
             }
         }
-        return new Result(Code.LOGIN_FAILED,"请先登录，再进行操作");
+        return new Result(Code.NO_LOGIN, "尚未登录，稍后将返回主界面");
     }
 }

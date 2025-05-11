@@ -11,6 +11,8 @@ public class Code {
     public final static int LOGIN_OUT_FAILED = 5006;
     public final static int EMAIL_SEND_TOO_FREQUENT = 5007;
     public final static int CODE_VERIFY_FAILED = 5008;
+    public final static int TOKEN_EXPIRED = 5009;
+    public final static int NO_LOGIN = 5010;
 
     public final static int LOGIN_SUCCESS = 2001;
     public final static int SEARCH_SUCCESS = 2002;
