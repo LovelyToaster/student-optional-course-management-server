@@ -30,7 +30,7 @@ public class UserController {
     }
 
     //  本地
-    private static final String UPLOAD_FOLDER = "C:\\Users\\Lovel\\OneDrive\\LovelyToaster94\\Program\\JetBrains_IDEA\\Project\\student-optional-course-management-web\\src\\assets\\avatar\\";
+    private static final String UPLOAD_FOLDER = "C:\\Users\\Lovel\\OneDrive\\LovelyToaster94\\Code\\JetBrains_IDEA\\Project\\student-optional-course-management-web-refresh\\src\\assets\\avatar\\";
     private static final String GET_AVATAR_PATH = "http://localhost:5173/src/assets/avatar/";
 
 //    服务器部署
@@ -86,7 +86,7 @@ public class UserController {
 
     @RequestMapping(value = "/setAvatar", method = RequestMethod.POST)
     @ResponseBody
-    public Result setAvatar(@RequestParam("file") MultipartFile file, HttpServletRequest request, HttpServletResponse response) {
+    public Result setAvatar(@RequestParam("file") MultipartFile file, HttpServletRequest request, HttpServletResponse response) throws IOException {
         String userName = request.getAttribute("userName").toString();
         int permissions = (int) request.getAttribute("permissions");
         String fileName = String.valueOf(UUID.nameUUIDFromBytes(userName.getBytes()));
@@ -96,11 +96,7 @@ public class UserController {
         if (!isSuccess) {
             return new Result(Code.MODIFY_FAILED, "头像修改失败");
         }
-        try {
-            file.transferTo(new File(UPLOAD_FOLDER + fileName + ".jpg"));
-        } catch (IOException e) {
-            return new Result(Code.SERVICE_FAILED, "发生错误，请联系管理员", e.getMessage());
-        }
+        file.transferTo(new File(UPLOAD_FOLDER + fileName + ".jpg"));
         user = new User();
         jwtUntil = new JwtUntil();
         user.setUserName(userName);
