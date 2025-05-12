@@ -120,24 +120,33 @@ public class GradeController {
             }
         }
         double averageGPA = 0;
+        int haveGpa = 0;
         for (String item : termList) {
             double gpa = 0;
             double credit = 0;
+            double noGpaCredit = 0;
             for (Grade gradeItem : data) {
                 if (gradeItem.getTerm().equals(item)) {
-                    gpa += gradeItem.getCoursePoint() * gradeItem.getCourseGrade();
-                    credit += gradeItem.getCourseGrade();
+                    if (gradeItem.getCoursePoint() >= 0) {
+                        gpa += gradeItem.getCoursePoint() * gradeItem.getCourseGrade();
+                        credit += gradeItem.getCourseGrade();
+                    } else {
+                        noGpaCredit += gradeItem.getCourseGrade();
+                    }
                 }
             }
-            gpa = gpa / credit;
-            averageGPA += gpa;
+            if (credit > 0) {
+                gpa = gpa / credit;
+                averageGPA += gpa;
+                haveGpa++;
+            }
             GPA gpaItem = new GPA();
             gpaItem.setTerm(item);
             gpaItem.setGpa(Double.parseDouble(String.format("%.2f", gpa)));
-            gpaItem.setCourseGrade((int) credit);
+            gpaItem.setCourseGrade((int) credit > 0 ? (int) credit : (int) noGpaCredit);
             gpaList.add(gpaItem);
         }
-        averageGPA = averageGPA / termList.size();
+        averageGPA = averageGPA / haveGpa;
         jsonObject.put("averageGPA", Double.parseDouble(String.format("%.2f", averageGPA)));
         jsonObject.put("GPA", gpaList);
         return new Result(Code.SEARCH_SUCCESS, "查询成功", jsonObject);
