@@ -2,10 +2,13 @@ package com.lovelytoaster94.Controller;
 
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
+import com.lovelytoaster94.Pojo.Course;
+import com.lovelytoaster94.Pojo.CourseTask;
 import com.lovelytoaster94.Pojo.GPA;
 import com.lovelytoaster94.Pojo.Grade;
+import com.lovelytoaster94.Service.CourseService;
+import com.lovelytoaster94.Service.CourseTaskService;
 import com.lovelytoaster94.Service.GradeService;
-import com.lovelytoaster94.Until.AddVerify;
 import com.lovelytoaster94.Until.Code;
 import com.lovelytoaster94.Until.Result;
 import com.lovelytoaster94.Until.ManagementResultInfo;
@@ -15,17 +18,24 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Controller
 @RequestMapping(value = "/grade")
 public class GradeController {
     private final GradeService gradeService;
+    private final CourseTaskService courseTaskService;
+    private final CourseService courseService;
     private final ManagementResultInfo managementResultInfo = new ManagementResultInfo();
 
-    public GradeController(GradeService gradeService) {
+    public GradeController(GradeService gradeService, CourseTaskService courseTaskService, CourseService courseService) {
         this.gradeService = gradeService;
+        this.courseTaskService = courseTaskService;
+        this.courseService = courseService;
     }
 
     @RequestMapping(value = "/all", method = RequestMethod.GET)
@@ -43,8 +53,14 @@ public class GradeController {
 
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @ResponseBody
-    public Result deleteGradeInfo(@RequestParam("no") String no) {
-        boolean data = gradeService.deleteGradeInfo(no);
+    public Result deleteGradeInfo(Grade grade, CourseTask courseTask) {
+        CourseTask courseTaskSearch = courseTaskService.searchCourseTaskInfo(courseTask).getFirst();
+
+        if (!checkTime(courseTaskSearch.getStartTime(), courseTaskSearch.getEndTime())) {
+            return new Result(Code.DELETE_FAILED, "该课程不在允许的选课时间范围内");
+        }
+
+        boolean data = gradeService.deleteGradeInfo(grade.getNo());
         return managementResultInfo.deleteInfo(data);
     }
 
@@ -57,11 +73,34 @@ public class GradeController {
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @ResponseBody
-    public Result addGradeInfo(Grade grade) {
-        AddVerify addVerify = new AddVerify();
-        if (!addVerify.verify(grade)) {
-            return new Result(Code.ADD_FAILED, "添加失败，请检查数据是否填写正确");
+    public Result addGradeInfo(Grade grade, CourseTask courseTask) {
+        CourseTask courseTaskSearch = courseTaskService.searchCourseTaskInfo(courseTask).getFirst();
+
+        if (!checkTime(courseTaskSearch.getStartTime(), courseTaskSearch.getEndTime())) {
+            return new Result(Code.ADD_FAILED, "该课程不在允许的选课时间范围内");
         }
+
+        boolean isIncluded = Arrays.asList(courseTaskSearch.getCourse().split(",")).contains(grade.getCourseNo());
+
+        if (!isIncluded) {
+            return new Result(Code.ADD_FAILED, "该课程不在允许的选课范围内");
+        }
+
+        Grade searchGrade = new Grade();
+        searchGrade.setStudentNo(grade.getStudentNo());
+        List<Grade> courseList = gradeService.searchGradeInfo(searchGrade);
+        Course course = new Course();
+        course.setCourseNo(grade.getCourseNo());
+        Course currentCourse = courseService.searchCourseInfo(course).getFirst();
+
+        for (Grade c : courseList) {
+            if (c.getCourseName().equals(currentCourse.getCourseName()) && !c.getCourseNo().equals(currentCourse.getCourseNo())) {
+                return new Result(Code.ADD_FAILED, "课程重复，不允许选择");
+            }
+        }
+
+        grade.setTerm(courseTaskSearch.getTerm());
+
         boolean verify = gradeService.addGradeInfo(grade);
         return managementResultInfo.addInfo(verify, grade);
     }
@@ -141,5 +180,14 @@ public class GradeController {
             jsonArray.add(gradeStatistics);
         }
         return new Result(Code.SEARCH_SUCCESS, "查询成功", jsonArray);
+    }
+
+    private boolean checkTime(String startTime, String endTime) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate startTimeLocal = LocalDate.parse(startTime, formatter);
+        LocalDate endTimeLocal = LocalDate.parse(endTime, formatter);
+        LocalDate currentTime = LocalDate.now();
+
+        return !currentTime.isBefore(startTimeLocal) && !currentTime.isAfter(endTimeLocal);
     }
 }
