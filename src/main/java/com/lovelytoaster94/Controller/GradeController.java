@@ -47,8 +47,37 @@ public class GradeController {
     @RequestMapping(value = "/modify", method = RequestMethod.POST)
     @ResponseBody
     public Result modifyGradeInfo(Grade grade) {
-        boolean data = gradeService.modifyGradeInfo(grade);
-        return managementResultInfo.modifyInfo(data);
+        int courseGrade = grade.getGrade();
+        double gpa;
+
+        if (courseGrade >= 90) {
+            gpa = 4.0;
+        } else if (courseGrade >= 85) {
+            gpa = 3.7;
+        } else if (courseGrade >= 82) {
+            gpa = 3.3;
+        } else if (courseGrade >= 78) {
+            gpa = 3.0;
+        } else if (courseGrade >= 75) {
+            gpa = 2.7;
+        } else if (courseGrade >= 72) {
+            gpa = 2.3;
+        } else if (courseGrade >= 68) {
+            gpa = 2.0;
+        } else if (courseGrade >= 66) {
+            gpa = 1.7;
+        } else if (courseGrade >= 64) {
+            gpa = 1.3;
+        } else if (courseGrade >= 60) {
+            gpa = 1.0;
+        } else {
+            gpa = 0.0;
+        }
+
+        grade.setCoursePoint(gpa);
+
+        boolean verify = gradeService.modifyGradeInfo(grade);
+        return managementResultInfo.modifyInfo(verify, grade);
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.POST)

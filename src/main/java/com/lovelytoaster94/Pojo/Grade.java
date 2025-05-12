@@ -10,6 +10,8 @@ public class Grade {
     private String term;
     private double coursePoint;
     private int courseGrade;
+    private String teacherNo;
+    private String teacherName;
 
     public String getNo() {
         return no;
@@ -81,5 +83,21 @@ public class Grade {
 
     public void setCourseGrade(int courseGrade) {
         this.courseGrade = courseGrade;
+    }
+
+    public String getTeacherNo() {
+        return teacherNo;
+    }
+
+    public void setTeacherNo(String teacherNo) {
+        this.teacherNo = teacherNo;
+    }
+
+    public String getTeacherName() {
+        return teacherName;
+    }
+
+    public void setTeacherName(String teacherName) {
+        this.teacherName = teacherName;
     }
 }

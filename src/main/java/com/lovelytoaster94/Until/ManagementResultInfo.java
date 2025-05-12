@@ -15,6 +15,14 @@ public class ManagementResultInfo {
         }
     }
 
+    public Result modifyInfo(Boolean verify, Object data) {
+        if (verify) {
+            return new Result(Code.MODIFY_SUCCESS, "修改成功", data);
+        } else {
+            return new Result(Code.MODIFY_FAILED, "修改失败，请检查数据");
+        }
+    }
+
     public Result deleteInfo(Boolean data) {
         if (data) {
             return new Result(Code.DELETE_SUCCESS, "删除成功");

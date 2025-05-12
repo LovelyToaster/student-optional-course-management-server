@@ -12,16 +12,21 @@
                grade,
                term,
                coursePoint,
-               courseGrade
+               courseGrade,
+               teacher.teacherNo,
+               teacher.teacherName
         from optional_course,
              student,
-             course
+             course,
+             teacher
         where optional_course.studentNo = student.studentNo
           and optional_course.courseNo = course.courseNo
+          and course.teacherNo = teacher.teacherNo
     </select>
     <update id="modifyGradeInfo" parameterType="com.lovelytoaster94.Pojo.Grade">
         update optional_course
-        set grade=#{grade}
+        set grade      = #{grade},
+            coursePoint= #{coursePoint}
         where no = #{no}
     </update>
     <delete id="deleteGradeInfo" parameterType="string">
@@ -31,11 +36,24 @@
     </delete>
     <select id="searchGradeInfo" resultType="com.lovelytoaster94.Pojo.Grade"
             parameterType="com.lovelytoaster94.Pojo.Grade">
-        select no, optional_course.studentNo, student.studentName, optional_course.courseNo, course.courseName, grade,
-        term, coursePoint,courseGrade
-        from optional_course,student,course
+        select no,
+        optional_course.studentNo,
+        student.studentName,
+        optional_course.courseNo,
+        course.courseName,
+        grade,
+        term,
+        coursePoint,
+        courseGrade,
+        teacher.teacherNo,
+        teacher.teacherName
+        from optional_course,
+        student,
+        course,
+        teacher
         where optional_course.studentNo = student.studentNo
         and optional_course.courseNo = course.courseNo
+        and course.teacherNo = teacher.teacherNo
         <if test="studentNo!=null">
             and student.studentNo=#{studentNo}
         </if>
@@ -50,6 +68,12 @@
         </if>
         <if test="term!=null">
             and optional_course.term=#{term}
+        </if>
+        <if test="teacherNo!=null">
+            and teacher.teacherNo=#{teacherNo}
+        </if>
+        <if test="teacherName!=null">
+            and teacher.teacherName like "%"#{teacherName}"%"
         </if>
     </select>
     <insert id="addGradeInfo" parameterType="com.lovelytoaster94.Pojo.Course">
