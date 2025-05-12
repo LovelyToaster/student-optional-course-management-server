@@ -13,16 +13,11 @@ import com.lovelytoaster94.Until.Code;
 import com.lovelytoaster94.Until.Result;
 import com.lovelytoaster94.Until.ManagementResultInfo;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 @Controller
 @RequestMapping(value = "/grade")
@@ -136,87 +131,116 @@ public class GradeController {
 
     @RequestMapping(value = "/getGPA", method = RequestMethod.GET)
     @ResponseBody
-    public Result getGPA(@RequestParam("studentNo") String studentNo) {
-        Grade grade = new Grade();
-        grade.setStudentNo(studentNo);
-        List<Grade> data = gradeService.searchGradeInfo(grade);
-        List<String> termList = new ArrayList<>();
-        List<GPA> gpaList = new ArrayList<>();
+    public Result getGPA(@RequestParam("studentNo") String studentNos, @RequestParam("teacherNo") String teacherNo) {
         JSONObject jsonObject = new JSONObject();
-        for (Grade item : data) {
-            if (!termList.contains(item.getTerm())) {
-                termList.add(item.getTerm());
+        List<GPA> gpaList = new ArrayList<>();
+        Map<String, List<Grade>> termGradeMap = new HashMap<>();
+
+        List<String> studentNoList = Arrays.asList(studentNos.split(","));
+        boolean needFilterByTeacher = studentNoList.size() > 1;
+
+        for (String studentNo : studentNoList) {
+            Grade grade = new Grade();
+            grade.setStudentNo(studentNo.trim());
+            List<Grade> data = gradeService.searchGradeInfo(grade);
+
+            for (Grade item : data) {
+                if (!needFilterByTeacher || teacherNo.equals(item.getTeacherNo())) {
+                    String term = item.getTerm();
+                    termGradeMap.computeIfAbsent(term, k -> new ArrayList<>()).add(item);
+                }
             }
         }
-        double averageGPA = 0;
-        int haveGpa = 0;
-        for (String item : termList) {
+
+        double totalGpa = 0;
+        int gpaTermCount = 0;
+
+        for (Map.Entry<String, List<Grade>> entry : termGradeMap.entrySet()) {
+            String term = entry.getKey();
+            List<Grade> grades = entry.getValue();
             double gpa = 0;
             double credit = 0;
             double noGpaCredit = 0;
-            for (Grade gradeItem : data) {
-                if (gradeItem.getTerm().equals(item)) {
-                    if (gradeItem.getCoursePoint() >= 0) {
-                        gpa += gradeItem.getCoursePoint() * gradeItem.getCourseGrade();
-                        credit += gradeItem.getCourseGrade();
-                    } else {
-                        noGpaCredit += gradeItem.getCourseGrade();
-                    }
+
+            for (Grade gradeItem : grades) {
+                if (gradeItem.getCoursePoint() >= 0) {
+                    gpa += gradeItem.getCoursePoint() * gradeItem.getCourseGrade();
+                    credit += gradeItem.getCourseGrade();
+                } else {
+                    noGpaCredit += gradeItem.getCourseGrade();
                 }
             }
+
             if (credit > 0) {
                 gpa = gpa / credit;
-                averageGPA += gpa;
-                haveGpa++;
+                totalGpa += gpa;
+                gpaTermCount++;
             }
+
             GPA gpaItem = new GPA();
-            gpaItem.setTerm(item);
+            gpaItem.setTerm(term);
             gpaItem.setGpa(Double.parseDouble(String.format("%.2f", gpa)));
-            gpaItem.setCourseGrade((int) credit > 0 ? (int) credit : (int) noGpaCredit);
+            gpaItem.setCourseGrade((int) (credit > 0 ? credit : noGpaCredit));
             gpaList.add(gpaItem);
         }
-        averageGPA = averageGPA / haveGpa;
+
+        double averageGPA = gpaTermCount > 0 ? totalGpa / gpaTermCount : 0;
         jsonObject.put("averageGPA", Double.parseDouble(String.format("%.2f", averageGPA)));
         jsonObject.put("GPA", gpaList);
+
         return new Result(Code.SEARCH_SUCCESS, "查询成功", jsonObject);
     }
 
+
     @RequestMapping(value = "/getGradeStatistics", method = RequestMethod.GET)
     @ResponseBody
-    public Result getGradeStatistics(@RequestParam("studentNo") String studentNo) {
-        Grade grade = new Grade();
-        grade.setStudentNo(studentNo);
-        List<Grade> data = gradeService.searchGradeInfo(grade);
+    public Result getGradeStatistics(@RequestParam("studentNo") String studentNos, @RequestParam("teacherNo") String teacherNo) {
+        List<String> studentNoList = Arrays.asList(studentNos.split(","));
+        List<Grade> allGrades = new ArrayList<>();
+
+        boolean filterByTeacher = studentNoList.size() > 1;
+
+        for (String studentNo : studentNoList) {
+            Grade grade = new Grade();
+            grade.setStudentNo(studentNo.trim());
+            List<Grade> data = gradeService.searchGradeInfo(grade);
+
+            for (Grade g : data) {
+                if (!filterByTeacher || (g.getTeacherNo() != null && g.getTeacherNo().equals(teacherNo))) {
+                    allGrades.add(g);
+                }
+            }
+        }
+
         JSONArray jsonArray = new JSONArray();
         JSONObject gradeStatistics;
-        String[] gradeName = {"90-100", "80-90", "70-80", "60-70", "不及格"};
+        String[] gradeName = {"90-100", "80-89", "70-79", "60-69", "不及格"};
         int[] gradeCount = new int[5];
-        for (Grade item : data) {
-            if (item.getGrade() >= 90 && item.getGrade() <= 100) {
+
+        for (Grade item : allGrades) {
+            double gradeValue = item.getGrade();
+            if (gradeValue >= 90 && gradeValue <= 100) {
                 gradeCount[0]++;
-            }
-            if (item.getGrade() >= 80 && item.getGrade() <= 89) {
+            } else if (gradeValue >= 80 && gradeValue <= 89) {
                 gradeCount[1]++;
-            }
-            if (item.getGrade() >= 70 && item.getGrade() <= 79) {
+            } else if (gradeValue >= 70 && gradeValue <= 79) {
                 gradeCount[2]++;
-            }
-            if (item.getGrade() >= 60 && item.getGrade() <= 69) {
+            } else if (gradeValue >= 60 && gradeValue <= 69) {
                 gradeCount[3]++;
-            }
-            if (item.getGrade() >= 0 && item.getGrade() <= 59) {
+            } else if (gradeValue >= 0 && gradeValue <= 59) {
                 gradeCount[4]++;
             }
         }
+
         for (int i = 0; i < gradeName.length; i++) {
-            if (gradeCount[i] == 0)
-                continue;
+            if (gradeCount[i] == 0) continue;
             gradeStatistics = new JSONObject();
             gradeStatistics.put("item", gradeName[i]);
             gradeStatistics.put("count", gradeCount[i]);
-            gradeStatistics.put("percent", Double.parseDouble(String.format("%.2f", (double) gradeCount[i] / data.size())));
+            gradeStatistics.put("percent", Double.parseDouble(String.format("%.2f", (double) gradeCount[i] / allGrades.size())));
             jsonArray.add(gradeStatistics);
         }
+
         return new Result(Code.SEARCH_SUCCESS, "查询成功", jsonArray);
     }
 
