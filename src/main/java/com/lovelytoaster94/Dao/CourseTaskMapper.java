@@ -10,4 +10,6 @@ public interface CourseTaskMapper {
     List<CourseTask> allCourseTaskInfo();
 
     List<CourseTask> searchCourseTaskInfo(CourseTask courseTask);
+
+    boolean deleteCourseTaskInfo(String courseTaskNo);
 }

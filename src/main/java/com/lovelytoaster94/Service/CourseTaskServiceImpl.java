@@ -26,4 +26,8 @@ public class CourseTaskServiceImpl implements CourseTaskService {
     public List<CourseTask> searchCourseTaskInfo(CourseTask courseTask) {
         return courseTaskMapper.searchCourseTaskInfo(courseTask);
     }
+
+    public boolean deleteCourseTaskInfo(String courseTaskNo) {
+        return courseTaskMapper.deleteCourseTaskInfo(courseTaskNo);
+    }
 }

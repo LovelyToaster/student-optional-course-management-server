@@ -9,6 +9,7 @@ import com.lovelytoaster94.Until.Result;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
@@ -39,5 +40,12 @@ public class CourseTaskController {
     public Result allCourseTaskInfo() {
         List<CourseTask> courseTaskList = courseTaskService.allCourseTaskInfo();
         return managementResultInfo.allInfo(courseTaskList);
+    }
+
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    @ResponseBody
+    public Result deleteCourseTaskInfo(@RequestParam("courseTaskNo") String courseTaskNo) {
+        boolean verify = courseTaskService.deleteCourseTaskInfo(courseTaskNo);
+        return managementResultInfo.deleteInfo(verify);
     }
 }

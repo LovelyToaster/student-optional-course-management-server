@@ -26,4 +26,10 @@
         select courseTaskNo, object, note, startTime, endTime, term, course
         from optional_course_task
     </select>
+
+    <delete id="deleteCourseTaskInfo" parameterType="com.lovelytoaster94.Pojo.CourseTask">
+        delete
+        from optional_course_task
+        where courseTaskNo = #{courseTaskNo}
+    </delete>
 </mapper>
