@@ -46,15 +46,9 @@ public class StudentController {
     @RequestMapping(value = "/modify", method = RequestMethod.POST)
     @ResponseBody
     public Result modifyStudentInfo(Student student) {
-        String email = student.getEmail();
-        if (email != null) {
-            MailUntil.setUserService(userService);
-            if (!MailUntil.isValidEmail(email)) {
-                return new Result(Code.MODIFY_FAILED, "邮箱格式不正确");
-            }
-            if (MailUntil.checkEmailRepeat(email, student.getStudentNo()) != null) {
-                return new Result(Code.EMAIL_REPEAT, "邮箱已被注册");
-            }
+        Result result = emailVerify(student);
+        if (!(result.getCode() == Code.ADD_SUCCESS)) {
+            return result;
         }
         boolean data = studentService.modifyStudentInfo(student);
         return managementResultInfo.modifyInfo(data);
@@ -80,6 +74,10 @@ public class StudentController {
         AddVerify addVerify = new AddVerify();
         if (!addVerify.verify(student)) {
             return new Result(Code.ADD_FAILED, "添加失败，请检查数据是否填写正确");
+        }
+        Result result = emailVerify(student);
+        if (!(result.getCode() == Code.ADD_SUCCESS)) {
+            return result;
         }
         boolean verify = studentService.addStudentInfo(student);
         Object data = null;
@@ -119,5 +117,19 @@ public class StudentController {
             return new Result(Code.DELETE_SUCCESS, "删除成功，共成功删除" + data.size() + "条数据", data);
         }
         return new Result(Code.DELETE_FAILED, "删除失败，共成功删除" + data.size() + "条数据", data);
+    }
+
+    private Result emailVerify(Student student) {
+        String email = student.getEmail();
+        if (email != null) {
+            MailUntil.setUserService(userService);
+            if (!MailUntil.isValidEmail(email)) {
+                return new Result(Code.MODIFY_FAILED, "邮箱格式不正确");
+            }
+            if (MailUntil.checkEmailRepeat(email, student.getStudentNo()) != null) {
+                return new Result(Code.EMAIL_REPEAT, "邮箱已被注册");
+            }
+        }
+        return new Result(Code.ADD_SUCCESS, "邮箱格式正确");
     }
 }
