@@ -131,7 +131,7 @@ public class GradeController {
 
     @RequestMapping(value = "/getGPA", method = RequestMethod.GET)
     @ResponseBody
-    public Result getGPA(@RequestParam("studentNo") String studentNos, @RequestParam("teacherNo") String teacherNo) {
+    public Result getGPA(@RequestParam("studentNo") String studentNos, @RequestParam(value = "teacherNo", required = false) String teacherNo) {
         JSONObject jsonObject = new JSONObject();
         List<GPA> gpaList = new ArrayList<>();
         Map<String, List<Grade>> termGradeMap = new HashMap<>();
@@ -194,7 +194,7 @@ public class GradeController {
 
     @RequestMapping(value = "/getGradeStatistics", method = RequestMethod.GET)
     @ResponseBody
-    public Result getGradeStatistics(@RequestParam("studentNo") String studentNos, @RequestParam("teacherNo") String teacherNo) {
+    public Result getGradeStatistics(@RequestParam("studentNo") String studentNos, @RequestParam(value = "teacherNo", required = false) String teacherNo, @RequestParam(value = "term", required = false) String term) {
         List<String> studentNoList = Arrays.asList(studentNos.split(","));
         List<Grade> allGrades = new ArrayList<>();
 
@@ -206,7 +206,8 @@ public class GradeController {
             List<Grade> data = gradeService.searchGradeInfo(grade);
 
             for (Grade g : data) {
-                if (!filterByTeacher || (g.getTeacherNo() != null && g.getTeacherNo().equals(teacherNo))) {
+                if ((!filterByTeacher || (g.getTeacherNo() != null && g.getTeacherNo().equals(teacherNo)))
+                        && (term == null || (g.getTerm() != null && g.getTerm().equals(term)))) {
                     allGrades.add(g);
                 }
             }
