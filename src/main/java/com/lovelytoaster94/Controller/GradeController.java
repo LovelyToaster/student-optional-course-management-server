@@ -218,9 +218,15 @@ public class GradeController {
         String[] gradeName = {"90-100", "80-89", "70-79", "60-69", "不及格"};
         int[] gradeCount = new int[5];
 
+        List<Grade> validGrades = new ArrayList<>();
+
         for (Grade item : allGrades) {
             double gradeValue = item.getGrade();
-            if (gradeValue >= 90 && gradeValue <= 100) {
+            if (gradeValue < 0 || gradeValue > 100) continue;
+
+            validGrades.add(item);
+
+            if (gradeValue >= 90) {
                 gradeCount[0]++;
             } else if (gradeValue >= 80 && gradeValue <= 89) {
                 gradeCount[1]++;
@@ -228,7 +234,7 @@ public class GradeController {
                 gradeCount[2]++;
             } else if (gradeValue >= 60 && gradeValue <= 69) {
                 gradeCount[3]++;
-            } else if (gradeValue >= 0 && gradeValue <= 59) {
+            } else if (gradeValue <= 59) {
                 gradeCount[4]++;
             }
         }
@@ -238,7 +244,7 @@ public class GradeController {
             gradeStatistics = new JSONObject();
             gradeStatistics.put("item", gradeName[i]);
             gradeStatistics.put("count", gradeCount[i]);
-            gradeStatistics.put("percent", Double.parseDouble(String.format("%.2f", (double) gradeCount[i] / allGrades.size())));
+            gradeStatistics.put("percent", Double.parseDouble(String.format("%.2f", (double) gradeCount[i] / validGrades.size())));
             jsonArray.add(gradeStatistics);
         }
 
