@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lovelytoaster94.Dao.CourseScheduleMapper">
+    <select id="allCourseScheduleInfo" resultType="com.lovelytoaster94.Pojo.CourseSchedule">
+        select courseScheduleNo,
+               course_schedule.courseNo,
+               courseName,
+               teacher.teacherNo,
+               class.classNo,
+               faculty.facultyNo,
+               facultyName,
+               major.majorNo,
+               majorName,
+               className,
+               teacherName,
+               time,
+               week,
+               place,
+               startTime,
+               endTime
+        from course_schedule,
+             course,
+             teacher,
+             class,
+             faculty,
+             major
+        where course_schedule.courseNo = course.courseNo
+          and course.teacherNo = teacher.teacherNo
+          and course_schedule.classNo = class.classNo
+          and major.majorNo = class.classMajorNo
+          and faculty.facultyNo = major.majorFacultiesNo
+    </select>
+
+    <insert id="addCourseScheduleInfo" parameterType="com.lovelytoaster94.Pojo.CourseSchedule">
+        <selectKey keyProperty="courseScheduleNo" resultType="string" order="BEFORE">
+            select if(max(courseScheduleNo) is null, 1, max(courseScheduleNo) + 1) as newId from course_schedule
+        </selectKey>
+        insert into course_schedule
+        (courseScheduleNo,courseNo,classNo,time,week,place,startTime,endTime)
+        values
+        (#{courseScheduleNo},#{courseNo},#{classNo},#{time},#{week},#{place},#{startTime},#{endTime})
+    </insert>
+
+    <select id="searchCourseScheduleInfo" parameterType="com.lovelytoaster94.Pojo.CourseSchedule"
+            resultType="com.lovelytoaster94.Pojo.CourseSchedule">
+        select courseScheduleNo,
+        course_schedule.courseNo,
+        courseName,
+        teacher.teacherNo,
+        class.classNo,
+        faculty.facultyNo,
+        facultyName,
+        major.majorNo,
+        majorName,
+        className,
+        teacherName,
+        time,
+        week,
+        place,
+        startTime,
+        endTime
+        from course_schedule,
+        course,
+        teacher,
+        class,
+        faculty,
+        major
+        where course_schedule.courseNo = course.courseNo
+        and course.teacherNo = teacher.teacherNo
+        and course_schedule.classNo = class.classNo
+        and major.majorNo = class.classMajorNo
+        and faculty.facultyNo = major.majorFacultiesNo
+        <if test="courseNo != null">
+            and course_schedule.courseNo = #{courseNo}
+        </if>
+        <if test="courseName != null">
+            and course.courseName = #{courseName}
+        </if>
+        <if test="classNo != null">
+            and course_schedule.classNo = #{classNo}
+        </if>
+        <if test="className != null">
+            and class.className = #{className}
+        </if>
+        <if test="week != null">
+            and course_schedule.week = #{week}
+        </if>
+        <if test="time != null">
+            and course_schedule.time = #{time}
+        </if>
+        <if test="place != null">
+            and course_schedule.place = #{place}
+        </if>
+        <if test="startTime != null">
+            and course_schedule.startTime = #{startTime}
+        </if>
+        <if test="endTime != null">
+            and course_schedule.endTime = #{endTime}
+        </if>
+        <if test="teacherNo != null">
+            and teacher.teacherNo = #{teacherNo}
+        </if>
+        <if test="teacherName != null">
+            and teacher.teacherName = #{teacherName}
+        </if>
+        <if test="facultyNo != null">
+            and faculty.facultyNo = #{facultyNo}
+        </if>
+        <if test="facultyName != null">
+            and faculty.facultyName = #{facultyName}
+        </if>
+        <if test="majorNo != null">
+            and major.majorNo = #{majorNo}
+        </if>
+        <if test="majorName != null">
+            and major.majorName = #{majorName}
+        </if>
+    </select>
+
+    <delete id="deleteCourseScheduleInfo" parameterType="string">
+        delete
+        from course_schedule
+        where courseScheduleNo = #{courseScheduleNo}
+    </delete>
+</mapper>
