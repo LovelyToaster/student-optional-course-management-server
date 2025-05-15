@@ -23,7 +23,7 @@ public class MailUntil {
 
     public static void sendMail(String toEmail, String code) throws MessagingException {
         final String fromEmail = "verdantgem@qq.com";
-        final String authCode = "rkzloxqjcllebbab";
+        final String authCode = System.getenv("EMAIL_AUTH_CODE");
 
         Properties props = new Properties();
         props.put("mail.smtp.host", "smtp.qq.com");
