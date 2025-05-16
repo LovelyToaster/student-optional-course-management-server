@@ -29,23 +29,36 @@
     </update>
 
     <select id="allUserInfo" resultType="com.lovelytoaster94.Pojo.User">
-        SELECT *
+        SELECT login.*,
+               COALESCE(teacher.teacherName, student.studentName) AS realName
         FROM login
+                 LEFT JOIN teacher ON login.userName = teacher.teacherNo
+                 LEFT JOIN student ON login.userName = student.studentNo;
     </select>
 
     <select id="searchUserInfo" parameterType="com.lovelytoaster94.Pojo.User"
             resultType="com.lovelytoaster94.Pojo.User">
-        SELECT *
+        SELECT
+        login.*,
+        COALESCE(teacher.teacherName, student.studentName) AS realName
         FROM login
+        LEFT JOIN teacher ON login.userName = teacher.teacherNo
+        LEFT JOIN student ON login.userName = student.studentNo
         <where>
-            <if test="userName!=null">
-                and userName like "%"#{userName}"%"
+            <if test="userName != null and userName != ''">
+                AND login.userName LIKE CONCAT('%', #{userName}, '%')
             </if>
-            <if test="permissions!=null">
-                and permissions=#{permissions}
+            <if test="permissions != null">
+                AND login.permissions = #{permissions}
             </if>
-            <if test="email!=null">
-                and email=#{email}
+            <if test="email != null and email != ''">
+                AND login.email = #{email}
+            </if>
+            <if test="realName != null and realName != ''">
+                AND (
+                teacher.teacherName LIKE CONCAT('%', #{realName}, '%')
+                OR student.studentName LIKE CONCAT('%', #{realName}, '%')
+                )
             </if>
         </where>
     </select>
@@ -53,6 +66,12 @@
     <update id="resetPassword">
         update login
         set userPassword="123456"
+        where userName = #{userName}
+    </update>
+
+    <update id="setPermissions">
+        update login
+        set permissions = #{permissions}
         where userName = #{userName}
     </update>
 </mapper>

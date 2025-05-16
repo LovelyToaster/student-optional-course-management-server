@@ -18,4 +18,6 @@ public interface UserService {
     boolean resetPassword(String userName);
 
     boolean setEmail(String userNamee, String email);
+
+    boolean setPermissions(String userName, int permissions);
 }

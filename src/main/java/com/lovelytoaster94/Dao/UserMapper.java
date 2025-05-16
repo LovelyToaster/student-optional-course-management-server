@@ -19,4 +19,6 @@ public interface UserMapper {
     boolean resetPassword(@Param("userName") String userName);
 
     boolean setEmail(@Param("userName") String userName, @Param("email") String email);
+
+    boolean setPermissions(@Param("userName") String userName, @Param("permissions") int permissions);
 }

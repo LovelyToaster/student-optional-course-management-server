@@ -160,6 +160,7 @@ public class UserController {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("userName", u.getUserName());
             jsonObject.put("permissions", u.getPermissions());
+            jsonObject.put("realName", u.getRealName());
             jsonObject.put("email", u.getEmail());
             if (u.getAvatarName() != null)
                 jsonObject.put("avatarPath", GET_AVATAR_PATH + u.getAvatarName() + ".jpg");
@@ -269,4 +270,21 @@ public class UserController {
         return new Result(Code.CODE_VERIFY_SUCCESS, "验证码验证成功");
     }
 
+    @RequestMapping(value = "/setPermissions", method = RequestMethod.POST)
+    @ResponseBody
+    public Result setPermissions(@RequestParam("userName") String userName, @RequestParam("permissions") int permissions) {
+        User userSearch = new User();
+        userSearch.setUserName(userName);
+        User user = userService.searchUserInfo(userSearch).getFirst();
+        if (user.getPermissions() == 0 && permissions != 0) {
+            User userPermissionSearch = new User();
+            userPermissionSearch.setPermissions(0);
+            if (userService.searchUserInfo(userPermissionSearch).size() <= 1) {
+                return new Result(Code.MODIFY_FAILED, "当前为最后一个管理员，请先添加其他管理员");
+            }
+        }
+
+        boolean verify = userService.setPermissions(userName, permissions);
+        return managementResultInfo.modifyInfo(verify);
+    }
 }

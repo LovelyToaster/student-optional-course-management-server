@@ -2,6 +2,7 @@ package com.lovelytoaster94.Pojo;
 
 public class User {
     private String userName;
+    private String realName;
     private String userPassword;
     private Integer permissions;
     private String avatarName;
@@ -46,5 +47,13 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
     }
 }

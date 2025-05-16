@@ -42,4 +42,8 @@ public class UserServiceImpl implements UserService {
     public boolean setEmail(String userName, String email) {
         return userMapper.setEmail(userName, email);
     }
+
+    public boolean setPermissions(String userName, int permissions) {
+        return userMapper.setPermissions(userName, permissions);
+    }
 }
