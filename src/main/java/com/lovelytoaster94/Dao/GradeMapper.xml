@@ -9,7 +9,9 @@
                student.studentName,
                optional_course.courseNo,
                course.courseName,
-               grade,
+               usualGrade,
+               finalExamGrade,
+               totalGrade,
                term,
                coursePoint,
                courseGrade,
@@ -25,7 +27,9 @@
     </select>
     <update id="modifyGradeInfo" parameterType="com.lovelytoaster94.Pojo.Grade">
         update optional_course
-        set grade      = #{grade},
+        set usualGrade=#{usualGrade},
+            finalExamGrade= #{finalExamGrade},
+            totalGrade= #{totalGrade},
             coursePoint= #{coursePoint}
         where no = #{no}
     </update>
@@ -41,7 +45,9 @@
         student.studentName,
         optional_course.courseNo,
         course.courseName,
-        grade,
+        usualGrade,
+        finalExamGrade,
+        totalGrade,
         term,
         coursePoint,
         courseGrade,

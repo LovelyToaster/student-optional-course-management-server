@@ -42,7 +42,10 @@ public class GradeController {
     @RequestMapping(value = "/modify", method = RequestMethod.POST)
     @ResponseBody
     public Result modifyGradeInfo(Grade grade) {
-        int courseGrade = grade.getGrade();
+        int usualGrade = grade.getUsualGrade();
+        int finalExamGrade = grade.getFinalExamGrade();
+        int courseGrade = (int) (usualGrade * 0.4 + finalExamGrade * 0.6);
+        grade.setTotalGrade(courseGrade);
         double gpa;
 
         if (courseGrade >= 90) {
@@ -221,7 +224,7 @@ public class GradeController {
         List<Grade> validGrades = new ArrayList<>();
 
         for (Grade item : allGrades) {
-            double gradeValue = item.getGrade();
+            double gradeValue = item.getTotalGrade();
             if (gradeValue < 0 || gradeValue > 100) continue;
 
             validGrades.add(item);

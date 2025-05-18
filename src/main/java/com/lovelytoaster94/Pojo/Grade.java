@@ -6,7 +6,9 @@ public class Grade {
     private String studentName;
     private String courseNo;
     private String courseName;
-    private int grade;
+    private int usualGrade;
+    private int finalExamGrade;
+    private int totalGrade;
     private String term;
     private double coursePoint;
     private int courseGrade;
@@ -35,14 +37,6 @@ public class Grade {
 
     public void setCourseNo(String courseNo) {
         this.courseNo = courseNo;
-    }
-
-    public int getGrade() {
-        return grade;
-    }
-
-    public void setGrade(int grade) {
-        this.grade = grade;
     }
 
     public String getStudentName() {
@@ -99,5 +93,29 @@ public class Grade {
 
     public void setTeacherName(String teacherName) {
         this.teacherName = teacherName;
+    }
+
+    public int getUsualGrade() {
+        return usualGrade;
+    }
+
+    public void setUsualGrade(int usualGrade) {
+        this.usualGrade = usualGrade;
+    }
+
+    public int getFinalExamGrade() {
+        return finalExamGrade;
+    }
+
+    public void setFinalExamGrade(int finalExamGrade) {
+        this.finalExamGrade = finalExamGrade;
+    }
+
+    public int getTotalGrade() {
+        return totalGrade;
+    }
+
+    public void setTotalGrade(int totalGrade) {
+        this.totalGrade = totalGrade;
     }
 }
