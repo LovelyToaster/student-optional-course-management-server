@@ -150,7 +150,10 @@ public class GradeController {
             for (Grade item : data) {
                 if (!needFilterByTeacher || teacherNo.equals(item.getTeacherNo())) {
                     String term = item.getTerm();
-                    termGradeMap.computeIfAbsent(term, k -> new ArrayList<>()).add(item);
+                    if (!termGradeMap.containsKey(term)) {
+                        termGradeMap.put(term, new ArrayList<>());
+                    }
+                    termGradeMap.get(term).add(item);
                 }
             }
         }
@@ -163,27 +166,32 @@ public class GradeController {
             List<Grade> grades = entry.getValue();
             double gpa = 0;
             double credit = 0;
-            double noGpaCredit = 0;
+            boolean hasInvalidGrade = false;
 
             for (Grade gradeItem : grades) {
-                if (gradeItem.getCoursePoint() >= 0) {
-                    gpa += gradeItem.getCoursePoint() * gradeItem.getCourseGrade();
-                    credit += gradeItem.getCourseGrade();
-                } else {
-                    noGpaCredit += gradeItem.getCourseGrade();
+                if (gradeItem.getCoursePoint() == -1) {
+                    hasInvalidGrade = true;
                 }
-            }
+                credit += gradeItem.getCourseGrade();
 
-            if (credit > 0) {
-                gpa = gpa / credit;
-                totalGpa += gpa;
-                gpaTermCount++;
+                if (!hasInvalidGrade) {
+                    gpa += gradeItem.getCoursePoint() * gradeItem.getCourseGrade();
+                }
             }
 
             GPA gpaItem = new GPA();
             gpaItem.setTerm(term);
-            gpaItem.setGpa(Double.parseDouble(String.format("%.2f", gpa)));
-            gpaItem.setCourseGrade((int) (credit > 0 ? credit : noGpaCredit));
+            gpaItem.setCourseGrade((int) credit);
+
+            if (hasInvalidGrade || credit == 0) {
+                gpaItem.setGpa(-1.0);
+            } else {
+                double termGpa = gpa / credit;
+                gpaItem.setGpa(Double.parseDouble(String.format("%.2f", termGpa)));
+                totalGpa += termGpa;
+                gpaTermCount++;
+            }
+
             gpaList.add(gpaItem);
         }
 
