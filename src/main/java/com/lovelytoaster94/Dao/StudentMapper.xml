@@ -104,11 +104,12 @@
     </select>
     <insert id="addStudentInfo" parameterType="com.lovelytoaster94.Pojo.Student">
         <selectKey keyProperty="studentNo" resultType="string" order="BEFORE">
-            select if(max(studentNo) is null, 200001, max(studentNo) + 1) as newId from student
+            select if(max(cast(studentNo as unsigned)) is null, '200001', cast(max(cast(studentNo as unsigned)) + 1 as
+            char)) as newId from student;
         </selectKey>
         insert into student (studentNo,studentName,studentSex,studentAge,studentClassNo)
         value(#{studentNo},#{studentName},#{studentSex},#{studentAge},#{classNo});
 
-        insert into login (userName, userPassword, permissions) value (#{studentNo},"123456",2)
+        insert into login (userName, userPassword, permissions, email) value (#{studentNo},"123456",2,#{email})
     </insert>
 </mapper>

@@ -95,14 +95,15 @@
     </select>
     <insert id="addTeacherInfo" parameterType="com.lovelytoaster94.Pojo.Teacher">
         <selectKey keyProperty="teacherNo" resultType="string" order="BEFORE">
-            select if(max(teacherNo) is null, 100001, max(teacherNo) + 1) as newId from teacher
+            select if(max(cast(teacherNo as unsigned)) is null, '100001', cast(max(cast(teacherNo as unsigned)) + 1 as
+            char)) as newId from teacher;
         </selectKey>
         insert into teacher
         (teacherNo,teacherName,teacherSex,teacherAge,teacherDegree,teacherJob,teacherGraduateInstitutions,teacherFacultiesNo)
         value(#{teacherNo},#{teacherName},#{teacherSex},#{teacherAge},#{teacherDegree},#{teacherJob},#{teacherGraduateInstitutions},#{facultyNo});
 
         insert into login
-        (userName, userPassword, permissions)
-        value (#{teacherNo},"123456",1)
+        (userName, userPassword, permissions, email)
+        value (#{teacherNo},"123456",1,#{email})
     </insert>
 </mapper>
