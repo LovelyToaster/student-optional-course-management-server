@@ -55,7 +55,7 @@
     </select>
     <insert id="addClassInfo" parameterType="com.lovelytoaster94.Pojo.Class">
         <selectKey keyProperty="classNo" resultType="string" order="BEFORE">
-            select if(max(classNo) is null, 1, max(classNo) + 1) as newId from class
+            select if(max(cast(classNo as unsigned)) is null, '1', cast(max(cast(classNo as unsigned)) + 1 as char)) as newId from class;
         </selectKey>
         insert into class
         (classNo, className, classMajorNo)

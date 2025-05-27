@@ -41,7 +41,7 @@
 
     <insert id="addMajorInfo" parameterType="com.lovelytoaster94.Pojo.Major">
         <selectKey keyProperty="majorNo" resultType="string" order="BEFORE">
-            select if(max(majorNo) is null, 1, max(majorNo) + 1) as newId from major
+            select if(max(cast(majorNo as unsigned)) is null, '1', cast(max(cast(majorNo as unsigned)) + 1 as char)) as newId from major;
         </selectKey>
             insert into major
             (majorNo, majorName, majorFacultiesNo)

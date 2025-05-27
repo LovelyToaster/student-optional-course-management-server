@@ -5,7 +5,7 @@
 <mapper namespace="com.lovelytoaster94.Dao.CourseTaskMapper">
     <insert id="addCourseTaskInfo" parameterType="com.lovelytoaster94.Pojo.CourseTask">
         <selectKey keyProperty="courseTaskNo" resultType="string" order="BEFORE">
-            select if(max(courseTaskNo) is null, 1, max(courseTaskNo) + 1) as newId from optional_course_task
+            select if(max(cast(courseTaskNo as unsigned)) is null, '1', cast(max(cast(courseTaskNo as unsigned)) + 1 as char)) as newId from optional_course_task;
         </selectKey>
 
         insert into optional_course_task(courseTaskNo, object, note, startTime, endTime, term, course)

@@ -49,7 +49,7 @@
     </select>
     <insert id="addCourseInfo" parameterType="com.lovelytoaster94.Pojo.Course">
         <selectKey keyProperty="courseNo" resultType="string" order="BEFORE">
-            select if(max(courseNo) is null, 100001, max(courseNo) + 1) as newId from course
+            select if(max(cast(courseNo as unsigned)) is null, '100001', cast(max(cast(courseNo as unsigned)) + 1 as char)) as newId from course;
         </selectKey>
         insert into course
         (courseNo,courseName,teacherNo,courseGrade,courseTime)

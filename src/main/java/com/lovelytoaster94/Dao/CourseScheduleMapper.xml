@@ -35,7 +35,7 @@
 
     <insert id="addCourseScheduleInfo" parameterType="com.lovelytoaster94.Pojo.CourseSchedule">
         <selectKey keyProperty="courseScheduleNo" resultType="string" order="BEFORE">
-            select if(max(courseScheduleNo) is null, 1, max(courseScheduleNo) + 1) as newId from course_schedule
+            select if(max(cast(courseScheduleNo as unsigned)) is null, '1', cast(max(cast(courseScheduleNo as unsigned)) + 1 as char)) as newId from course_schedule
         </selectKey>
         insert into course_schedule
         (courseScheduleNo,courseNo,classNo,time,week,place,startTime,endTime)

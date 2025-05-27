@@ -49,7 +49,7 @@
 
     <insert id="addFacultyInfo" parameterType="com.lovelytoaster94.Pojo.Faculty">
         <selectKey keyProperty="facultyNo" resultType="string" order="BEFORE">
-            select if(max(facultyNo) is null, 1, max(facultyNo) + 1) as newId from faculty
+            select if(max(cast(facultyNo as unsigned)) is null, '1', cast(max(cast(facultyNo as unsigned)) + 1 as char)) as newId from faculty;
         </selectKey>
         insert into faculty
         (facultyNo, facultyName, deanNo, officeLocation)
